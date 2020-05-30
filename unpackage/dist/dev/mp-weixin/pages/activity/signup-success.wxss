@@ -1,0 +1,11 @@
+
+.page {
+	height: 100vh;
+}
+.message-box {
+	height: 200rpx;
+}
+.bg-img {
+	width: 690rpx;
+}
+

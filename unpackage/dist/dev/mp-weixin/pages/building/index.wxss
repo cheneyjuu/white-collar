@@ -1,0 +1,7 @@
+
+.page {
+	/* padding-top: 45px; */
+	background-color: #FFFFFF;
+	height: 100vh;
+}
+

@@ -1,0 +1,47 @@
+<template>
+	<view>
+		<cu-custom bgColor="bg-white" :isBack="true"><block slot="content">白领创潮</block></cu-custom>
+		<view class="cu-card case no-card">
+			<view class="cu-item shadow">
+				<view class="image"><image src="http://px.thea.cn/Public/Upload/Uploadfiles/image/20190104/20190104135707_26297.jpg" mode="widthFix"></image></view>
+				<view class="cu-list menu-avatar">
+					<view class="flex flex-direction course-title padding-left padding-bottom">
+						<view class="text-lg padding-top-xs">JOL查看对象内存结构</view>
+						<view class="text-gray padding-top-xs">使用jol查看java对象在内存中的布局，深入 JAVA 原理</view>
+						<view class="text-gray padding-top-xs">31人参加 | 全12课</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-card case no-card margin-top-sm">
+			<view class="cu-item shadow">
+				<view class="image"><image src="http://n.sinaimg.cn/sinacn/w640h317/20180129/eaa7-fyqzcxh7180621.jpg" mode="widthFix"></image></view>
+				<view class="cu-list menu-avatar">
+					<view class="flex flex-direction course-title padding-left padding-bottom">
+						<view class="text-lg padding-top-xs">现代白领缓解焦虑的救命药：王阳明心学</view>
+						<view class="text-gray padding-top-xs">千古万人王阳明，教我们如何面对焦虑</view>
+						<view class="text-gray padding-top-xs">50000人参加 | 全31课</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-card case no-card margin-top-sm margin-bottom-sm">
+			<view class="cu-item shadow">
+				<view class="image"><image src="https://s1.ax1x.com/2020/05/23/YxuJdP.jpg" mode="widthFix"></image></view>
+				<view class="cu-list menu-avatar">
+					<view class="flex flex-direction course-title padding-left padding-bottom">
+						<view class="text-lg padding-top-xs">一听就懂的《易经》</view>
+						<view class="text-gray padding-top-xs">筑阶十二级，带你入易门</view>
+						<view class="text-gray padding-top-xs">2000人参加 | 全12课</view>
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+</script>
+
+<style>
+</style>
