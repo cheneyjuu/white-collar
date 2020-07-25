@@ -10,11 +10,11 @@
 							class="cu-avatar xl radius"
 							style="background-image:url(http://img.zcool.cn/community/01e0ae58ae3d72a801219c77fadb52.png@1280w_1l_2o_100sh.png);"
 						></view>
-						<view class="margin-top-sm text-df">
-							<button class="cu-btn round shadow shadow-blur" open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
+						<!-- <view class="margin-top-sm text-df"> -->
+							<!-- <button class="cu-btn round shadow shadow-blur" open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
 								点击授权
-							</button>
-						</view>
+							</button> -->
+						<!-- </view> -->
 					</view>
 					
 					
@@ -30,35 +30,47 @@
 
 			<!-- list -->
 			<view class="cu-list menu margin-top-lg text-lg">
-				<view class="cu-item" :class="'arrow'">
+				<view class="cu-item arrow" @click="onBrowserHistory">
 					<view class="content">
 						<text class="cuIcon-footprint text-orange"></text>
 						<text class="text-grey">我的足迹</text>
 					</view>
 				</view>
-				<view class="cu-item" :class="'arrow'">
+				<view class="cu-item arrow" @click="onFavor">
 					<view class="content">
 						<text class="cuIcon-favor text-orange"></text>
 						<text class="text-grey">我的收藏</text>
 					</view>
 				</view>
-				<view class="cu-item" :class="'arrow'">
-					<button class="cu-btn content" open-type="contact">
+				<view class="cu-item arrow" @click="onActivity">
+					<view class="content">
 						<text class="cuIcon-activity text-orange"></text>
 						<text class="text-grey">我的活动</text>
-					</button>
+					</view>
 				</view>
-				<view class="cu-item" :class="'arrow'">
-					<navigator class="content" hover-class="none">
+				<view class="cu-item arrow" @click="onMessage">
+					<view class="content">
 						<text class="cuIcon-notice text-orange"></text>
 						<text class="text-grey">消息通知</text>
-					</navigator>
+					</view>
 				</view>
-				<view class="cu-item" :class="'arrow'">
-					<navigator class="content" hover-class="none">
+				<view class="cu-item arrow" @click="onCoupon">
+					<view class="content">
 						<text class="cuIcon-ticket text-orange"></text>
 						<text class="text-grey">我的优惠券</text>
-					</navigator>
+					</view>
+				</view>
+			</view>
+			
+			<view class="margin-top flex justify-center flex-direction bg-white" :class="token ? 'animation-fade' : ''" v-if="!token">
+				<view class="flex justify-center margin-top margin-bottom text-gray">
+					使用微信帐号登录 黄浦楼宇白领圈 小程序
+				</view>
+				<view class="margin-bottom-sm" style="width: 80%; margin-left: 10%;">
+					<view class="flex justify-between" style="width: 100%;">
+						<button class="cu-btn shadow" style="width: 40%;">取消</button>
+						<button class="cu-btn bg-gradual-orange shadow" style="width: 40%;" open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">授权</button>
+					</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -208,6 +220,65 @@ export default {
 					}
 				}
 			});
+		},
+		onFavor() {
+			const token = this.token;
+			if (!token) {
+				uni.showToast({
+					icon: 'none',
+					title: '您还未登录'
+				});
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/mine/my-favor'
+			})
+		},
+		onBrowserHistory() {
+			const token = this.token;
+			if (!token) {
+				uni.showToast({
+					icon: 'none',
+					title: '您还未登录'
+				});
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/topic/history'
+			})
+		},
+		onActivity() {
+			const token = this.token;
+			if (!token) {
+				uni.showToast({
+					icon: 'none',
+					title: '您还未登录'
+				});
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/activity/myJoinActivies'
+			})
+		},
+		onMessage() {
+			uni.showToast({
+				icon: 'none',
+				title: ' 暂未开放'
+			});
+			return;
+		},
+		onCoupon() {
+			const token = this.token;
+			if (!token) {
+				uni.showToast({
+					icon: 'none',
+					title: '您还未登录'
+				});
+				return;
+			}
+			uni.navigateTo({
+				url: '/pages/coupon/myCoupons'
+			})
 		}
 	},
 	onLoad(param) {

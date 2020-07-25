@@ -1,5 +1,6 @@
 <script>
 import Vue from 'vue';
+import * as constants from '@/utils/constant.js';
 export default {
 	onLaunch: function() {
 		uni.getSystemInfo({
@@ -110,8 +111,33 @@ export default {
 			}
 		];
 	},
+	authentication(openId) {
+		const that = this;
+		
+	},
 	onShow: function() {
 		console.log('App Show');
+		const userInfo = uni.getStorageSync('userInfo');
+		if (userInfo) {
+			const { openId } = userInfo;
+			uni.request({
+				url: `${constants.baseUrl}/authenticate`,
+				data: {
+					username: openId,
+					password: openId
+				},
+				method: 'POST',
+				header: {
+					'content-type': 'application/json'
+				},
+				success: res => {
+					uni.setStorage({
+						key: 'id_token',
+						data: res.data.id_token
+					});
+				}
+			});
+		}
 	},
 	onHide: function() {
 		console.log('App Hide');

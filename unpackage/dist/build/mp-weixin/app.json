@@ -1,0 +1,94 @@
+{
+  "pages": [
+    "pages/square/home",
+    "pages/race/raceMap",
+    "pages/race/race",
+    "pages/race/detail",
+    "pages/race/register",
+    "pages/race/intro",
+    "pages/race/disclaimer",
+    "pages/race/ranking",
+    "pages/vote/home",
+    "pages/mine/home",
+    "pages/topic/history",
+    "pages/vote/top",
+    "pages/policy/details",
+    "pages/activity/myJoinActivies",
+    "pages/coupon/myCoupons",
+    "pages/activity/signup",
+    "pages/coupon/home",
+    "pages/coupon/details",
+    "pages/activity/home",
+    "pages/building/index",
+    "pages/building/details",
+    "pages/square/questionnaire",
+    "pages/activity/weekend",
+    "pages/activity/view2",
+    "pages/activity/view1",
+    "pages/activity/signup-success",
+    "pages/activity/details",
+    "pages/activity/details-template",
+    "pages/activity/h5view",
+    "pages/square/form",
+    "pages/course/index",
+    "pages/topic/home",
+    "pages/topic/details",
+    "pages/policy/index",
+    "pages/mine/my-favor",
+    "pages/question/index"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#707070",
+    "selectedColor": "#d4237a",
+    "backgroundColor": "#FFFFFF",
+    "blurEffect": "light",
+    "list": [
+      {
+        "pagePath": "pages/square/home",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home_cur.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/activity/home",
+        "iconPath": "static/tabbar/activity.png",
+        "selectedIconPath": "static/tabbar/activity_cur.png",
+        "text": "活动"
+      },
+      {
+        "pagePath": "pages/coupon/home",
+        "iconPath": "static/tabbar/coupon.png",
+        "selectedIconPath": "static/tabbar/coupon_cur.png",
+        "text": "福利"
+      },
+      {
+        "pagePath": "pages/mine/home",
+        "iconPath": "static/tabbar/mine.png",
+        "selectedIconPath": "static/tabbar/mine_cur.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "白领圈申请使用您的位置信息"
+    }
+  },
+  "uniStatistics": {
+    "enable": false
+  },
+  "usingComponents": {
+    "mescroll-body": "/components/mescroll-uni/mescroll-body",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "cu-custom": "/colorui/components/cu-custom"
+  },
+  "sitemapLocation": "sitemap.json"
+}

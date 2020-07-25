@@ -4,16 +4,69 @@
 			"path": "pages/square/home",
 			"style": {}
 		},{
-			"path": "pages/activity/home",
+			"path": "pages/race/raceMap",
+			"style": {
+			}
+		},{
+			"path": "pages/race/routeMap",
 			"style": {}
 		},{
-			"path": "pages/coupon/home",
+			"path": "pages/race/race",
+			"style": {
+			}
+		},{
+			"path": "pages/race/detail",
+			"style": {}
+		},{
+			"path": "pages/race/register",
+			"style": {}
+		},{
+			"path": "pages/race/intro",
+			"style": {}
+		},{
+			"path": "pages/race/disclaimer",
+			"style": {}
+		},{
+			"path": "pages/race/ranking",
+			"style": {}
+		},{
+			"path": "pages/vote/home",
 			"style": {}
 		},{
 			"path": "pages/mine/home",
 			"style": {}
 		},{
+			"path": "pages/topic/history",
+			"style": {}
+		},{
+			"path": "pages/vote/top",
+			"style": {}
+		},{
+			"path": "pages/policy/details",
+			"style": {}
+		},{
+			"path": "pages/activity/myJoinActivies",
+			"style": {}
+		},{
+			"path": "pages/coupon/myCoupons",
+			"style": {}
+		},{
+			"path": "pages/activity/signup",
+			"style": {}
+		},{
+			"path": "pages/coupon/home",
+			"style": {}
+		},{
+			"path": "pages/coupon/details",
+			"style": {}
+		},{
+			"path": "pages/activity/home",
+			"style": {}
+		},{
 			"path": "pages/building/index",
+			"style": {}
+		},{
+			"path": "pages/building/details",
 			"style": {}
 		},{
 			"path": "pages/square/questionnaire",
@@ -31,9 +84,6 @@
 			"path": "pages/activity/signup-success",
 			"style": {}
 		},{
-			"path": "pages/activity/signup",
-			"style": {}
-		},{
 			"path": "pages/activity/details",
 			"style": {}
 		},{
@@ -49,8 +99,22 @@
 			"path": "pages/course/index",
 			"style": {}
 		},{
+			"path": "pages/topic/home",
+			"style": {}
+		},{
+			"path": "pages/topic/details",
+			"style": {}
+		},{
 			"path": "pages/policy/index",
 			"style": {}
+		}, {
+			"path": "pages/mine/my-favor",
+			"style": {}
+		}, {
+			"path": "pages/question/index",
+			"style": {
+				// "navigationBarTitleText": "投票"
+			}
 		}
 	],
 	"globalStyle": {
@@ -69,7 +133,7 @@
 				"pagePath": "pages/square/home",
 				"iconPath": "static/tabbar/home.png",
 				"selectedIconPath": "static/tabbar/home_cur.png",
-				"text": "广场"
+				"text": "首页"
 			},
 			{
 				"pagePath": "pages/activity/home",
@@ -88,6 +152,36 @@
 				"iconPath": "static/tabbar/mine.png",
 				"selectedIconPath": "static/tabbar/mine_cur.png",
 				"text": "我的"
+			}
+		]
+	},
+	"condition": {
+		"current": 4,
+		"list": [
+			{
+				"name":"赛事详情",
+				"path":"pages/race/detail",
+				"query":"raceId=354836885279744"
+			},
+			{
+				"name":"赛事轨迹",
+				"path":"pages/race/raceMap",
+				"query":"itemId=377271873445376"
+			},
+			{
+				"name":"赛事报名",
+				"path":"pages/race/register",
+				"query":""
+			},
+			{
+				"name":"免责声明",
+				"path":"pages/race/disclaimer",
+				"query":""
+			},
+			{
+				"name":"排行",
+				"path":"pages/race/ranking",
+				"query":"itemId=377271873445376"
 			}
 		]
 	}

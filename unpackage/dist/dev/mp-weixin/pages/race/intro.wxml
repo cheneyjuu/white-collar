@@ -1,0 +1,1 @@
+<view><cu-custom vue-id="7fc71402-1" bgColor="bg-white" isBack="{{true}}" bind:__l="__l" vue-slots="{{['content']}}"><view slot="content">{{routeInfo.title}}</view></cu-custom><view class="bg-white padding container"><jyf-parser vue-id="7fc71402-2" html="{{routeInfo.intro}}" bind:__l="__l"></jyf-parser></view></view>

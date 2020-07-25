@@ -10,7 +10,7 @@
     "es6": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.9.2",
+  "libVersion": "",
   "appid": "wx8b505bdaf0b5fdda",
   "projectname": "white-collar",
   "condition": {
@@ -27,8 +27,39 @@
       "list": []
     },
     "miniprogram": {
-      "current": -1,
-      "list": []
+      "current": 4,
+      "list": [
+        {
+          "name": "赛事详情",
+          "query": "raceId=354836885279744",
+          "id": 0,
+          "pathName": "pages/race/detail"
+        },
+        {
+          "name": "赛事轨迹",
+          "query": "itemId=377271873445376",
+          "id": 1,
+          "pathName": "pages/race/raceMap"
+        },
+        {
+          "name": "赛事报名",
+          "query": "",
+          "id": 2,
+          "pathName": "pages/race/register"
+        },
+        {
+          "name": "免责声明",
+          "query": "",
+          "id": 3,
+          "pathName": "pages/race/disclaimer"
+        },
+        {
+          "name": "排行",
+          "query": "itemId=377271873445376",
+          "id": 4,
+          "pathName": "pages/race/ranking"
+        }
+      ]
     }
   }
 }

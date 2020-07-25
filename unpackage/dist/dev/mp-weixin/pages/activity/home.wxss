@@ -2,6 +2,9 @@
 .page {
 	padding-top: 45px;
 }
+.cu-card:not(:first-child) {
+	margin-top: 20rpx;
+}
 .cus-activity {
 	width: 100%;
 	-webkit-box-pack: justify;

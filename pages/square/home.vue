@@ -1,11 +1,9 @@
 <template name="square">
 	<view>
 		<scroll-view scroll-y class="page">
-			<cu-custom bgColor="bg-white"><block slot="content">广场</block></cu-custom>
+			<cu-custom bgColor="bg-white"><block slot="content">首页</block></cu-custom>
 			<swiper class="screen-swiper square-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000" duration="500">
-				<swiper-item v-for="(item, index) in swiperList" :key="index" @click="viewBigBanner(index)">
-					<image :src="item.url" mode="aspectFill"></image>
-				</swiper-item>
+				<swiper-item v-for="(item, index) in firstBannerList" :key="index" @click="viewBanner(item)"><image :src="item.coverImage" mode="aspectFill"></image></swiper-item>
 			</swiper>
 
 			<view class="cu-list grid" :class="['col-4', 'no-border']">
@@ -18,41 +16,48 @@
 					<text class="text-black text-bold">{{ item.name }}</text>
 				</view>
 			</view>
-			
-			<swiper class="card-swiper square-dot" :indicator-dots="true" :circular="true"
-			 :autoplay="true" interval="6000" duration="500" @change="cardSwiper" indicator-color="#8799a3"
-			 indicator-active-color="#dc3633">
-				<swiper-item v-for="(item,index) in adSwiperList" :key="index" :class="adCardCur==index?'cur':''">
-					<view class="swiper-item" @click="adImgClicked(index)">
-						<image :src="item.url" mode="aspectFill" v-if="item.type=='image'"></image>
-					</view>
+
+			<swiper
+				class="card-swiper square-dot"
+				:indicator-dots="true"
+				:circular="true"
+				:autoplay="true"
+				interval="6000"
+				duration="500"
+				@change="cardSwiper"
+				indicator-color="#8799a3"
+				indicator-active-color="#dc3633"
+			>
+				<swiper-item v-for="(item, index) in secondBannerList" :key="index" :class="adCardCur == index ? 'cur' : ''">
+					<view class="swiper-item" @click="viewBanner(item)"><image :src="item.coverImage" mode="aspectFill"></image></view>
 				</swiper-item>
 			</swiper>
-			
-			<view class="cu-bar solid-bottom bg-red light" :class="'no-card'">
+
+			<view class="cu-bar solid-bottom text-red no-card" style="margin-bottom: -20upx;">
 				<view class="action">
 					<text class="cuIcon-activity" style="font-size: 40rpx;"></text>
-					<text class="text-lg text-bold">最新活动</text>
+					<text class="text-lg text-bold">白领活动</text>
 				</view>
 			</view>
-			<view class="cu-card case no-card" v-for="(item, index) in activityData" :key="index">
+			<view class="cu-card case no-card activity-list" v-for="(item, index) in activityData" :key="index">
 				<view class="cu-item shadow">
 					<view class="title padding-left padding-top">
-						<view class="cu-tag bg-red light sm round margin-right-sm" v-if="item.type === 0">{{item.typeStr}}</view>
-						<view class="cu-tag bg-green light sm round margin-right-sm" v-if="item.type === 1">{{item.typeStr}}</view>
-						<view class="text-cut text-xl">{{item.title}}</view>
+						<view class="cu-tag bg-red light sm round margin-right-sm" v-if="item.type === 0">{{ item.typeStr }}</view>
+						<view class="cu-tag bg-green light sm round margin-right-sm" v-if="item.type === 1">{{ item.typeStr }}</view>
+						<view class="text-cut text-xl">{{ item.title }}</view>
 					</view>
-					<view class="image" @click="viewActivityDetails(item.activityId)">
-						<image :src="item.coverImage" mode="widthFix" style="max-height: 440rpx;"></image>
-					</view>
+					<view class="image" @click="viewActivityDetails(item.activityId)"><image :src="item.coverImage" mode="widthFix" style="max-height: 440rpx;"></image></view>
 					<view class="cu-list menu-avatar">
 						<view class="cu-item cus-activity">
 							<view class="activity-info solid-bottom padding">
 								<view class="text-gray">
-									<text class="cuIcon-peoplelist margin-lr-xs"></text><text class="text-lg text-red">{{item.registeredCount}}</text>/{{item.peopleLimitFlag ? item.peopleLimit : '不限'}}
+									<text class="cuIcon-peoplelist margin-lr-xs"></text>
+									<text class="text-lg text-red">{{ item.registeredCount }}</text>
+									/{{ item.peopleLimitFlag ? item.peopleLimit : '不限' }}
 								</view>
 								<view class="text-gray padding-top-xs">
-									<text class="cuIcon-calendar margin-lr-xs"></text>{{item.startDate}}
+									<text class="cuIcon-calendar margin-lr-xs"></text>
+									{{ item.startDate }}
 								</view>
 							</view>
 							<view class="activity-action"><button class="cu-btn round bg-gradual-red" @click="viewActivityDetails(item.activityId)">查看详情</button></view>
@@ -60,36 +65,54 @@
 					</view>
 				</view>
 			</view>
-			
-			<view class="cu-bar solid-bottom bg-red light no-card">
+
+			<view class="cu-bar solid-bottom text-red no-card margin-top" style="margin-bottom: -20upx;">
 				<view class="action">
 					<text class="cuIcon-newsfill" style="font-size: 40rpx;"></text>
-					<text class="text-lg text-bold">金融政策</text>
+					<text class="text-lg text-bold">政策信息</text>
 				</view>
 			</view>
-			<view class="cu-card case no-card">
-				<view class="cu-item shadow">
-					<view class="image" @click="viewForm">
-						<image src="http://p8.itc.cn/images03/20200523/c5ff5f37f7a74e04b668cb409b8261c0.jpeg" mode="widthFix"></image>
-						<view class="cu-bar bg-shadeBottom text-lg">
-							<text class="cuIcon-rankfill text-white"><text style="padding-left: 16rpx;">500人</text></text>
+			<view v-for="(item, index) in policyList" :key="index">
+				<view class="cu-card case no-card">
+					<view class="cu-item shadow">
+						<view class="title margin">
+							<text class="text-black text-xl text-cut">{{ item.title }}</text>
 						</view>
-					</view>
+						<view class="image" @click="viewPolicyDetails(item.topicId)">
+							<image :src="item.coverImage" mode="widthFix"></image>
+							<!-- <view class="cu-bar bg-shadeBottom text-lg">
+								<text class="cuIcon-rankfill text-white"><text style="padding-left: 16rpx;">500人</text></text>
+							</view> -->
+						</view>
 
-					<view class="cu-list menu-avatar">
-						<view class="cu-item">
-							<view class="cus-title flex">
-								<view class="title margin-top-xs"><text class="text-black text-xl text-cut">「两会」上的金融提案</text></view>
-								<view class="sub-action text-gray margin-top-sm text-df margin-bottom-xs">
-									<view class="author text-cut">
-										<text>作者：新浪财经</text>
+						<view class="cu-list menu-avatar">
+							<view class="cu-item">
+								<view class="cus-title flex">
+									<view class="sub-action text-gray margin text-df">
+										<!-- <view class="author text-cut"><text>作者：新浪财经</text></view> -->
+										<view class="flex justify-around" style="width: 100%;">
+											<view class="">
+												<text
+													class="cuIcon-appreciatefill padding-lr-sm"
+													:class="item.userLikeFlag === true ? 'text-red' : ''"
+													@click="onInteractive(item, 'LIKE')"
+												></text>
+												{{ item.likeCount }}
+											</view>
+											<view class="">
+												<text class="cuIcon-messagefill padding-lr-sm"></text>
+												30
+											</view>
+											<view class="">
+												<text
+													class="cuIcon-favorfill padding-lr-sm"
+													:class="item.userFavorFlag === true ? 'text-red' : ''"
+													@click="onInteractive(item, 'FAVOR')"
+												></text>
+												{{ item.favorCount }}
+											</view>
+										</view>
 									</view>
-									<text class="cuIcon-appreciatefill padding-lr-sm text-red"></text>
-									25
-									<text class="cuIcon-messagefill padding-lr-sm"></text>
-									30
-									<text class="cuIcon-favorfill padding-lr-sm"></text>
-									30
 								</view>
 							</view>
 						</view>
@@ -97,90 +120,69 @@
 				</view>
 			</view>
 
-			
-			<view class="cu-bar solid-bottom bg-red light no-card">
+			<view class="cu-bar solid-bottom text-red no-card margin-top" style="margin-bottom: -20upx;">
 				<view class="action">
 					<text class="cuIcon-discover" style="font-size: 40rpx;"></text>
 					<text class="text-lg text-bold">白领创潮</text>
 				</view>
 			</view>
-			<view class="cu-card case margin-top-sm no-card">
+			<view class="cu-card case no-card" v-for="(item, index) in topicList" :key="index">
 				<view class="cu-item shadow">
 					<view class="flex align-center padding-left padding-top">
-						<view class="cu-tag bg-green light sm round margin-right-sm">自发</view>
-						<view class="text-cut text-xl">这个周末，思南夜派对！</view>
+						<!-- <view class="cu-tag bg-green light sm round margin-right-sm">自发</view> -->
+						<view class="text-cut text-xl">{{ item.title }}</view>
 					</view>
-					<view class="image" @click="viewActivity2"><image src="https://s1.ax1x.com/2020/05/22/YXWnQe.jpg" mode="widthFix"></image></view>
+					<view class="image" @click="viewTopicDetails(item.topicId)"><image :src="item.coverImage"></image></view>
 					<view class="cu-list menu-avatar">
 						<view class="cu-item cus-activity">
 							<view class="activity-info solid-bottom padding">
-								<view class="text-gray">
-									<text class="cuIcon-peoplelist margin-lr-xs"></text><text class="text-lg text-red">31</text>/50
-								</view>
+								<!-- <view class="text-gray">
+									<text class="cuIcon-peoplelist margin-lr-xs"></text>
+									<text class="text-lg text-red">31</text>
+									/50
+								</view> -->
 								<view class="text-gray padding-top-xs">
-									<text class="cuIcon-calendar margin-lr-xs"></text>2020年6月1日 上午9:30
+									<text class="cuIcon-calendar margin-lr-xs"></text>
+									{{ item.createdDate }}
 								</view>
 							</view>
-							<view class="activity-action"><button class="cu-btn round bg-gradual-red" @click="viewActivity2">查看详情</button></view>
-						</view>
-					</view>
-				</view>
-			</view>
-			
-			<view class="cu-card case no-card margin-top-sm">
-				<view class="cu-item shadow">
-					<view class="image"><image src="http://n.sinaimg.cn/sinacn/w640h317/20180129/eaa7-fyqzcxh7180621.jpg" mode="widthFix"></image></view>
-					<view class="cu-list menu-avatar">
-						<view class="flex flex-direction course-title padding-left padding-bottom">
-							<view class="text-lg padding-top-xs">现代白领缓解焦虑的救命药：王阳明心学</view>
-							<view class="text-gray padding-top-xs">千古万人王阳明，教我们如何面对焦虑</view>
-							<view class="text-gray padding-top-xs">50000人参加 | 全31课</view>
+							<view class="activity-action"><button class="cu-btn round bg-gradual-red" @click="viewTopicDetails(item.topicId)">查看详情</button></view>
 						</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="cu-card article case no-card margin-top-sm">
-				<view class="cu-item shadow">
-					<view class="content margin-top-sm">
-						<text class="text-content">
-							Java世界中“几乎”所有的对象都在堆中分配，但是，随着JIT编译期的发展与逃逸分析技术逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么“绝对”了。从jdk 1.7开始已经默认开启逃逸分析，如果某些方法中的对象引用没有被返回或者未被外面使用（也就是未逃逸出去），那么对象可以直接在栈上分配内存。
-						</text>
-					</view>
-					<view class="image"><image src="https://s1.ax1x.com/2020/05/23/YxuGZt.jpg" mode="widthFix"></image></view>
-					<view class="flex text-gray text-lg justify-between margin-lr margin-top-sm">
-						<view class="text-red"><text class="cuIcon-appreciatefill padding-lr-sm"></text>25</view>
-						<view><text class="cuIcon-message padding-lr-sm"></text>25</view>
-						<view><text class="cuIcon-favor padding-lr-sm"></text>30</view>
-						<view><text class="cuIcon-share padding-lr-sm"></text>30</view>
-					</view>
-				</view>
-			</view>
-			
-			<view class="cu-bar solid-bottom bg-red light no-card">
+			<view class="cu-bar solid-bottom text-red no-card margin-top" style="margin-bottom: -20upx;">
 				<view class="action">
 					<text class="cuIcon-discover" style="font-size: 40rpx;"></text>
 					<text class="text-lg text-bold">楼宇联盟</text>
 				</view>
 			</view>
-			<view class="cu-card article case no-card">
-				<view class="cu-item shadow">
-					<view class="content margin-top-sm">
-						<text class="text-content" style="height: 2.8em;">
-							日前，我区楼宇联盟成立仪式暨楼宇联盟首次交流活动在外滩金融中心举行。
-						</text>
+			<view class="cu-card article case no-card " v-for="(item, index) in buildingList" :key="index">
+				<view class="cu-item shadow" @click="viewBuildingDetails(item.topicId)">
+					<view class="content margin-top-sm flex flex-direction">
+						<view class="text-cut text-xl">{{ item.title }}</view>
+						<!-- <view class="text-gray text-sm padding-top-sm">{{item.summary}}</view> -->
 					</view>
-					<view class="image"><image src="https://s1.ax1x.com/2020/05/23/YvVQ4H.jpg" mode="widthFix"></image></view>
-					<view class="flex text-gray text-lg justify-between margin-lr margin-top-sm">
-						<view class="text-red"><text class="cuIcon-appreciatefill padding-lr-sm"></text>25</view>
-						<view><text class="cuIcon-message padding-lr-sm"></text>25</view>
-						<view class="text-red"><text class="cuIcon-favorfill padding-lr-sm"></text>30</view>
-						<view><text class="cuIcon-share padding-lr-sm"></text>30</view>
+					<view class="image"><image :src="item.coverImage" mode="widthFix"></image></view>
+				</view>
+			</view>
+			<view class="cu-modal" :class="modalName == 'DialogModal1' ? 'show' : ''">
+				<view class="cu-dialog">
+					<view class="cu-bar bg-white justify-end">
+						<view class="content">操作提示</view>
+						<view class="action" @tap="hideModal"><text class="cuIcon-close text-red"></text></view>
+					</view>
+					<view class="padding-xl">您还未登录，是否现在去登录？</view>
+					<view class="cu-bar bg-white justify-end">
+						<view class="action">
+							<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+							<button class="cu-btn bg-green margin-left" @tap="gotoLogin">确定</button>
+						</view>
 					</view>
 				</view>
 			</view>
-			
-			<view class="cu-tabbar-height margin-bottom-sm"></view>
+			<!-- <view class="cu-tabbar-height margin-bottom-sm"></view> -->
 		</scroll-view>
 	</view>
 </template>
@@ -250,11 +252,11 @@ export default {
 					cuIcon: 'newsfill',
 					color: 'yellow',
 					badge: 0,
-					name: '金融政策'
+					name: '政策信息'
 				},
 				{
 					cuIcon: 'creativefill',
-					color: 'cyan',
+					color: 'blue',
 					badge: 0,
 					name: '白领创潮'
 				},
@@ -268,7 +270,7 @@ export default {
 					cuIcon: 'upstagefill',
 					color: 'orange',
 					badge: 0,
-					name: '白领运动'
+					name: '白领赛事'
 				}
 			],
 			modalName: null,
@@ -279,12 +281,13 @@ export default {
 			menuCard: false,
 			skin: false,
 			listTouchStart: 0,
-			listTouchDirection: null
+			listTouchDirection: null,
+			firstBannerList: [],
+			secondBannerList: [],
+			policyList: [],
+			topicList: [],
+			buildingList: []
 		};
-	},
-	onShow: function() {
-		console.log(123);
-		this.loadActivity();
 	},
 	methods: {
 		viewForm: function() {
@@ -293,7 +296,7 @@ export default {
 			});
 		},
 		cardSwiper(e) {
-			this.adCardCur = e.detail.current
+			this.adCardCur = e.detail.current;
 		},
 		viewH5Page(url) {
 			uni.navigateTo({
@@ -305,15 +308,56 @@ export default {
 				url: '/pages/square/questionnaire'
 			});
 		},
-		viewBigBanner(index) {
-			console.log(index);
-			if (index === 1) {
+		viewBanner(item) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
+			if (item.channel === 'ACTIVITY') {
 				uni.navigateTo({
-					url: '../activity/h5view?url=https://mp.weixin.qq.com/s/7vA5McVtg0COvAlLzNe9bQ'
+					url: `/pages/activity/details?activityId=${item.uniId}`
+				});
+			}
+			if (item.channel === 'TOPIC') {
+				if (item.articleType === 'FINANCIAL_POLICY') {
+					uni.navigateTo({
+						url: `/pages/policy/details?topicId=${item.uniId}`
+					});
+				}
+				if (item.articleType === 'WHITE_COLLAR_CREATOR') {
+					uni.navigateTo({
+						url: `/pages/topic/details?topicId=${item.uniId}`
+					});
+				}
+				if (item.articleType === 'BUILDING') {
+					uni.navigateTo({
+						url: `/pages/building/details?topicId=${item.uniId}`
+					});
+				}
+				if (item.articleType === 'VOTE') {
+					uni.navigateTo({
+						url: `/pages/vote/home?voteId=${item.uniId}`
+					});
+				}
+			}
+			if (item.channel === 'VOTE') {
+				uni.navigateTo({
+					url: `/pages/vote/home?voteId=${item.uniId}`
+				});
+			}
+			if (item.channel === 'RACE') {
+				uni.navigateTo({
+					url: `/pages/race/detail?raceId=${item.uniId}`
 				});
 			}
 		},
 		adImgClicked(index) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
 			if (index === 0) {
 				// 直播
 				uni.navigateTo({
@@ -324,7 +368,7 @@ export default {
 				uni.navigateTo({
 					url: '/pages/square/questionnaire'
 				});
-			} 
+			}
 			// else if (index === 2) {
 			// 	// 企业服务
 			// 	uni.navigateTo({
@@ -336,17 +380,22 @@ export default {
 			console.log(index);
 			if (index === 0) {
 				uni.navigateTo({
-					url: '/pages/policy/index'
+					url: '/pages/policy/index?articleType=0'
 				});
 			}
 			if (index === 1) {
 				uni.navigateTo({
-					url: '/pages/course/index'
+					url: '/pages/topic/home'
 				});
 			}
 			if (index === 2) {
 				uni.navigateTo({
 					url: '/pages/building/index'
+				});
+			}
+			if (index === 3) {
+				uni.navigateTo({
+					url: '/pages/race/race'
 				});
 			}
 		},
@@ -373,12 +422,181 @@ export default {
 			});
 		},
 		viewActivityDetails(activityId) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
 			uni.navigateTo({
 				url: `/pages/activity/details?activityId=${activityId.id}`
-			})
+			});
+		},
+		// 获取一级 Banner
+		loadBanners() {
+			uni.request({
+				url: `${constants.baseUrl}/banners`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + this.token
+				},
+				success: res => {
+					const { data } = res.data;
+					console.log(data);
+					this.firstBannerList = data['firstBannerList'];
+					this.secondBannerList = data['secondBannerList'];
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		loadPolicyData() {
+			uni.request({
+				url: `${constants.baseUrl}/topic/index?articleType=0`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + this.token
+				},
+				success: res => {
+					const { data } = res.data;
+					this.policyList = data;
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		loadTopicData() {
+			uni.request({
+				url: `${constants.baseUrl}/topic/index?articleType=1`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + this.token
+				},
+				success: res => {
+					const { data } = res.data;
+					this.topicList = data;
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		loadBuildingData() {
+			uni.request({
+				url: `${constants.baseUrl}/topic/index?articleType=2`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + this.token
+				},
+				success: res => {
+					const { data } = res.data;
+					this.buildingList = data;
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		viewPolicyDetails(topicId) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
+			uni.navigateTo({
+				url: `/pages/policy/details?topicId=${topicId.id}`
+			});
+		},
+		viewTopicDetails(topicId) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
+			uni.navigateTo({
+				url: `/pages/topic/details?topicId=${topicId.id}`
+			});
+		},
+		viewBuildingDetails(topicId) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName = 'DialogModal1';
+				return;
+			}
+			uni.navigateTo({
+				url: `/pages/building/details?topicId=${topicId.id}`
+			});
+		},
+		onInteractive(item, type) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				uni.showToast({
+					icon: 'none',
+					title: '您还未登录'
+				});
+				return;
+			}
+			const param = {
+				recordId: item.topicId.id,
+				recordType: item.articleType,
+				interactiveType: type
+			};
+			uni.request({
+				url: `${constants.baseUrl}/interactive`,
+				data: param,
+				method: 'POST',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + token
+				},
+				success: res => {
+					const data = res.data;
+					if (data.code === 200) {
+						if (type === 'LIKE') {
+							if (data.data !== null) {
+								item.userLikeFlag = true;
+								item.likeCount += 1;
+							} else {
+								item.userLikeFlag = false;
+								item.likeCount -= 1;
+							}
+						}
+						if (type === 'FAVOR') {
+							if (data.data !== null) {
+								item.userFavorFlag = true;
+								item.favorCount += 1;
+							} else {
+								item.userFavorFlag = false;
+								item.favorCount -= 1;
+							}
+						}
+					}
+				}
+			});
+		},
+		hideModal(e) {
+			this.modalName = null;
+		},
+		gotoLogin() {
+			this.modalName = null;
+			uni.reLaunch({
+				url: '/pages/mine/home'
+			});
 		}
 	},
-
+	onShow: function() {
+		const token = uni.getStorageSync('id_token');
+		if (!token) {
+			this.modalName = 'DialogModal1';
+		}
+		this.loadActivity();
+		this.loadBanners();
+		this.loadPolicyData();
+		this.loadTopicData();
+		this.loadBuildingData();
+	
+	}
 };
 </script>
 
@@ -440,5 +658,8 @@ export default {
 }
 .course-title {
 	align-content: flex-start;
+}
+.cu-card {
+	margin-top: 20upx;
 }
 </style>

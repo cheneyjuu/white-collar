@@ -1,22 +1,42 @@
 {
   "pages": [
     "pages/square/home",
-    "pages/activity/home",
-    "pages/coupon/home",
+    "pages/race/raceMap",
+    "pages/race/routeMap",
+    "pages/race/race",
+    "pages/race/detail",
+    "pages/race/register",
+    "pages/race/intro",
+    "pages/race/disclaimer",
+    "pages/race/ranking",
+    "pages/vote/home",
     "pages/mine/home",
+    "pages/topic/history",
+    "pages/vote/top",
+    "pages/policy/details",
+    "pages/activity/myJoinActivies",
+    "pages/coupon/myCoupons",
+    "pages/activity/signup",
+    "pages/coupon/home",
+    "pages/coupon/details",
+    "pages/activity/home",
     "pages/building/index",
+    "pages/building/details",
     "pages/square/questionnaire",
     "pages/activity/weekend",
     "pages/activity/view2",
     "pages/activity/view1",
     "pages/activity/signup-success",
-    "pages/activity/signup",
     "pages/activity/details",
     "pages/activity/details-template",
     "pages/activity/h5view",
     "pages/square/form",
     "pages/course/index",
-    "pages/policy/index"
+    "pages/topic/home",
+    "pages/topic/details",
+    "pages/policy/index",
+    "pages/mine/my-favor",
+    "pages/question/index"
   ],
   "subPackages": [],
   "window": {
@@ -36,7 +56,7 @@
         "pagePath": "pages/square/home",
         "iconPath": "static/tabbar/home.png",
         "selectedIconPath": "static/tabbar/home_cur.png",
-        "text": "广场"
+        "text": "首页"
       },
       {
         "pagePath": "pages/activity/home",
@@ -67,6 +87,9 @@
     "enable": false
   },
   "usingComponents": {
+    "mescroll-body": "/components/mescroll-uni/mescroll-body",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
     "cu-custom": "/colorui/components/cu-custom"
-  }
+  },
+  "sitemapLocation": "sitemap77.json"
 }

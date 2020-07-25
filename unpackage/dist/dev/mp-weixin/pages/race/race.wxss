@@ -1,0 +1,22 @@
+
+.race-box {
+	width: 100vw;
+}
+.race-box .title {
+	padding: 20rpx;
+}
+.bg-gradual-gray {
+	background-image: -webkit-linear-gradient(top, #FFFFFF, #efefef);
+	background-image: linear-gradient(180deg, #FFFFFF, #efefef);
+}
+.race-body {
+	/* position: absolute; */
+	/* top: 330rpx; */
+}
+.race-body .race-item {
+	display: inline-block;
+	width: 355rpx;
+	height: 400rpx;
+	overflow: hidden;
+}
+
