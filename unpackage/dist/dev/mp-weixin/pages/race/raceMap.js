@@ -92,11 +92,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
-var components = {
-  uniSteps: function() {
-    return __webpack_require__.e(/*! import() | components/uni-steps/uni-steps */ "components/uni-steps/uni-steps").then(__webpack_require__.bind(null, /*! @/components/uni-steps/uni-steps.vue */ 374))
-  }
-}
+var components
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -135,6 +131,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -297,18 +305,23 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
 //
 //
 //
-var uniSteps = function uniSteps() {__webpack_require__.e(/*! require.ensure | components/uni-steps/uni-steps */ "components/uni-steps/uni-steps").then((function () {return resolve(__webpack_require__(/*! @/components/uni-steps/uni-steps.vue */ 374));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { uniSteps: uniSteps }, data: function data() {return { raceId: '', itemId: '', lng: 0, lat: 0, isStart: false, raceInterval: null, markers: [], polyline: [{ points: [], color: '#12aa9cDD', width: 2, dottedLine: false }], enableScroll: true, nums: '00:00:00', timer: null, myInterval: null, speed: 0, covers: [], meters: 0.0, info: '', minute: 0, hour: 0, oriMeters: 0.0, showMeters: 0.0, pointTitles: [], scroll: -1, currentPoint: {}, currentIndex: 0, currentPointStr: null, showDialog: false, checkinIndexList: [], data: [], modalName: null, complete: false, raceInfo: uni.getStorageSync('raceInfo') ? uni.getStorageSync('raceInfo') : { itemId: null, index: 0, complete: false }, isDebug: true };}, methods: { regionchange: function regionchange(e) {}, markertap: function markertap(e) {// console.log(e.detail.markerId);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { data: function data() {return { raceId: '', itemId: '', lng: 0, lat: 0, isStart: false, raceInterval: null, markers: [], polyline: [{ points: [], color: '#12aa9cDD', width: 2, dottedLine: false }], enableScroll: true, nums: '00:00:00', timer: null, myInterval: null, speed: 0, covers: [], meters: 0.0, info: '', minute: 0, hour: 0, oriMeters: 0.0, showMeters: 0.0, pointTitles: [], scroll: -1, currentPoint: {}, currentIndex: 0, currentPointStr: null, showDialog: false, checkinIndexList: [], data: [], modalName: null, complete: false, raceInfo: uni.getStorageSync('raceInfo') ? uni.getStorageSync('raceInfo') : { itemId: null, index: 0, complete: false }, isDebug: false };}, methods: { hideModal: function hideModal(e) {this.modalName = null;}, gotoLogin: function gotoLogin() {this.modalName = null;uni.reLaunch({ url: '/pages/mine/home' });}, regionchange: function regionchange(e) {}, markertap: function markertap(e) {// console.log(e.detail.markerId);
     }, controltap: function controltap(e) {// console.log(e.detail.controlId);
-    }, loadRouteData: function loadRouteData(itemId) {var that = this;var token = uni.getStorageSync('id_token');var userInfo = uni.getStorageSync('userInfo');uni.request({ url: "".concat(constants.baseUrl, "/races/items/").concat(itemId, "/routes"), method: 'GET', header: { 'content-type': 'application/json', Authorization: 'Bearer ' + token }, success: function success(res) {var data = res.data.data;console.log('签到点'); // 排除已打过的卡
-          console.log('itemid', that.itemId);console.log('race item id', that.raceInfo.itemId);if (that.raceInfo.index > 0 && that.raceInfo.itemId === that.itemId) {that.currentIndex = that.raceInfo.index;that.scroll = that.currentIndex - 1;}that.data = data;that.data.forEach(function (item, index) {that.pointTitles.push({ title: item.title }); // that.pointTitles.push(item.title);
-            var iconPath = "/static/map/".concat(index + 1, ".png");var mark = { iconPath: iconPath, id: index,
-              longitude: item.lng,
-              latitude: item.lat,
-              width: 32,
-              height: 32 };
-
-            that.markers.push(mark);
-          });
+    }, loadRouteData: function loadRouteData(itemId) {var that = this;var token = uni.getStorageSync('id_token');var userInfo = uni.getStorageSync('userInfo');uni.request({ url: "".concat(constants.baseUrl, "/races/items/").concat(itemId, "/routes"), method: 'GET', header: { 'content-type': 'application/json', Authorization: 'Bearer ' + token }, success: function success(res) {var data = res.data.data;var checkInInfoList = data.checkInInfoList; // 排除已打过的卡
+          if (that.raceInfo.index > 0 && that.raceInfo.itemId === that.itemId) {that.currentIndex = that.raceInfo.index;that.scroll = that.currentIndex - 1;}that.data = data;that.data.forEach(function (item, index) {// that.pointTitles.push({title: item.title});
+            that.pointTitles.push(item.title);var iconPath = "/static/map/".concat(index + 1, ".png");var mark = { iconPath: iconPath, id: index, longitude: item.lng, latitude: item.lat, width: 32, height: 32 };that.markers.push(mark);});
           that.currentPoint = that.data[that.currentIndex];
 
           that.myInterval = setInterval(function () {var _that$currentPoint =
@@ -414,9 +427,6 @@ var uniSteps = function uniSteps() {__webpack_require__.e(/*! require.ensure | c
       that.showDialog = false;
       that.enableScroll = true;
       that.currentPoint = that.data[that.currentIndex];
-    },
-    hideModal: function hideModal(e) {
-      this.modalName = null;
     },
     completeRace: function completeRace() {
       this.modalName = null;
@@ -569,9 +579,15 @@ var uniSteps = function uniSteps() {__webpack_require__.e(/*! require.ensure | c
     } },
 
   onLoad: function onLoad(param) {
+    var token = uni.getStorageSync('id_token');
+    if (!token) {
+      this.modalName = 'DialogModal1';
+    }
     this.raceId = param.raceId;
     this.itemId = param.itemId;
-    var raceInfo = uni.getStorageInfoSync('raceInfo');
+    var raceInfo = uni.getStorageSync('raceInfo');
+    console.log('race info');
+    console.log(raceInfo);
     if (!raceInfo) {
       this.raceInfo.itemId = param.itemId;
     }

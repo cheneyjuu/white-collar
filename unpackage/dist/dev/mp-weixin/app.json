@@ -2,6 +2,7 @@
   "pages": [
     "pages/square/home",
     "pages/race/raceMap",
+    "pages/race/randomMap",
     "pages/race/routeMap",
     "pages/race/race",
     "pages/race/detail",
@@ -36,7 +37,8 @@
     "pages/topic/details",
     "pages/policy/index",
     "pages/mine/my-favor",
-    "pages/question/index"
+    "pages/question/index",
+    "pages/race/bindInfo/bindInfo"
   ],
   "subPackages": [],
   "window": {
@@ -90,6 +92,5 @@
     "mescroll-body": "/components/mescroll-uni/mescroll-body",
     "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
     "cu-custom": "/colorui/components/cu-custom"
-  },
-  "sitemapLocation": "sitemap77.json"
+  }
 }

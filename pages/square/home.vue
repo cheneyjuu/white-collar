@@ -583,9 +583,34 @@ export default {
 			uni.reLaunch({
 				url: '/pages/mine/home'
 			});
+		},
+		authentication(openId) {
+			const that = this;
+			uni.request({
+				url: `${constants.baseUrl}/authenticate`,
+				data: {
+					username: openId,
+					password: openId
+				},
+				method: 'POST',
+				header: {
+					'content-type': 'application/json'
+				},
+				success: res => {
+					that.token = res.data.id_token;
+					uni.setStorage({
+						key: 'id_token',
+						data: that.token,
+						success: () => {
+							
+						}
+					});
+				}
+			});
 		}
 	},
 	onShow: function() {
+		const userInfo = uni.getStorageSync('userInfo');
 		const token = uni.getStorageSync('id_token');
 		if (!token) {
 			this.modalName = 'DialogModal1';
@@ -595,7 +620,10 @@ export default {
 		this.loadPolicyData();
 		this.loadTopicData();
 		this.loadBuildingData();
-	
+		if (userInfo) {
+			const openId = userInfo.openId;
+			this.authentication(openId);
+		}
 	}
 };
 </script>

@@ -31,32 +31,38 @@
       "list": [
         {
           "name": "赛事详情",
-          "query": "raceId=354836885279744",
+          "query": "raceId=377271462403584",
           "id": 0,
           "pathName": "pages/race/detail"
         },
         {
           "name": "赛事轨迹",
-          "query": "itemId=377271873445376",
+          "query": "itemId=363717275424640",
           "id": 1,
           "pathName": "pages/race/raceMap"
         },
         {
+          "name": "随机打卡-轨迹",
+          "query": "itemId=363717275424640",
+          "id": 2,
+          "pathName": "pages/race/randomMap"
+        },
+        {
           "name": "赛事报名",
           "query": "",
-          "id": 2,
+          "id": 3,
           "pathName": "pages/race/register"
         },
         {
           "name": "免责声明",
           "query": "",
-          "id": 3,
+          "id": 4,
           "pathName": "pages/race/disclaimer"
         },
         {
           "name": "排行",
           "query": "itemId=377271873445376",
-          "id": 4,
+          "id": 5,
           "pathName": "pages/race/ranking"
         }
       ]

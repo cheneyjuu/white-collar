@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view class="page">
 		<cu-custom bgColor="bg-white" :isBack="true"><block slot="content">赛事轨迹</block></cu-custom>
 		<view class="">
 			<map
@@ -13,7 +13,7 @@
 				:enable-scroll="enableScroll"
 				@regionchange="regionchange"
 				show-location
-				style="width: 100%; height: 74vh;"
+				style="width: 100%; height: 78vh;"
 			>
 				<view class="cover-view" v-if="showDialog">
 					<view class="triangle"></view>
@@ -32,16 +32,12 @@
 			</map>
 		</view>
 		
-		<!-- <scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom" :scroll-into-view="'scroll-' + scroll" scroll-with-animation>
-			<view class="cu-item margin" :class="index > scroll ? 'text-gray' : 'text-blue'" v-for="(item, index) in pointTitles" :key="index" :id="'scroll-' + index">
-				{{ item }}
+		<scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom" :scroll-into-view="'scroll-' + scroll" scroll-with-animation style="position: absolute; bottom: 0;">
+			<view class="cu-item" :class="index > scroll ? 'text-orange' : 'text-green text-bold'" v-for="(item, index) in pointTitles" :key="index" :id="'scroll-' + index" style="margin-top: 20rpx;">
+				<text class="flex flex-wrap padding-lr-xl">{{ item }}</text>
 				<text class="num" :data-index="index + 1"></text>
 			</view>
-		</scroll-view> -->
-		
-		<view class="info-box flex align-center justify-center">
-			<uni-steps :options="pointTitles" :active="scroll" activeColor="#0081ff" deactiveColor="#aaaaaa"></uni-steps>
-		</view>
+		</scroll-view>
 
 		<view class="cu-modal" :class="modalName == 'DialogModal1' ? 'show' : ''">
 			<view class="cu-dialog">
@@ -76,14 +72,28 @@
 				<button class="bg-red cu-round" @click="endRace()" v-if="isStart === true">结束</button>
 			</view>
 		</view> -->
+		
+		<view class="cu-modal" :class="modalName == 'DialogModal1' ? 'show' : ''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作提示</view>
+					<view class="action" @tap="hideModal"><text class="cuIcon-close text-red"></text></view>
+				</view>
+				<view class="padding-xl">您还未登录，是否现在去登录？</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal">取消</button>
+						<button class="cu-btn bg-green margin-left" @tap="gotoLogin">确定</button>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
 import * as constants from '@/utils/constant.js';
-import uniSteps from '@/components/uni-steps/uni-steps.vue'
 export default {
-	components: {uniSteps},
 	data() {
 		return {
 			raceId: '',
@@ -124,10 +134,19 @@ export default {
 			modalName: null,
 			complete: false,
 			raceInfo: uni.getStorageSync('raceInfo') ? uni.getStorageSync('raceInfo') : {itemId:null, index: 0, complete: false},
-			isDebug: true
+			isDebug: false
 		};
 	},
 	methods: {
+		hideModal(e) {
+			this.modalName = null;
+		},
+		gotoLogin() {
+			this.modalName = null;
+			uni.reLaunch({
+				url: '/pages/mine/home'
+			});
+		},
 		regionchange(e) {
 			
 		},
@@ -150,18 +169,16 @@ export default {
 				},
 				success: res => {
 					const { data } = res.data;
-					console.log('签到点');
+					const checkInInfoList = data.checkInInfoList;
 					// 排除已打过的卡
-					console.log('itemid', that.itemId);
-					console.log('race item id', that.raceInfo.itemId);
 					if (that.raceInfo.index > 0 && that.raceInfo.itemId === that.itemId) {
 						that.currentIndex = that.raceInfo.index;
 						that.scroll = that.currentIndex - 1;
 					}
 					that.data = data;
 					that.data.forEach((item, index) => {
-						that.pointTitles.push({title: item.title});
-						// that.pointTitles.push(item.title);
+						// that.pointTitles.push({title: item.title});
+						that.pointTitles.push(item.title);
 						let iconPath = `/static/map/${index + 1}.png`;
 						const mark = {
 							iconPath: iconPath,
@@ -278,9 +295,6 @@ export default {
 			that.showDialog = false;
 			that.enableScroll = true;
 			that.currentPoint = that.data[that.currentIndex];
-		},
-		hideModal(e) {
-			this.modalName = null;
 		},
 		completeRace() {
 			this.modalName = null;
@@ -433,9 +447,15 @@ export default {
 		}
 	},
 	onLoad(param) {
+		const token = uni.getStorageSync('id_token');
+		if (!token) {
+			this.modalName = 'DialogModal1';
+		}
 		this.raceId = param.raceId;
 		this.itemId = param.itemId;
-		const raceInfo = uni.getStorageInfoSync('raceInfo');
+		const raceInfo = uni.getStorageSync('raceInfo');
+		console.log('race info');
+		console.log(raceInfo);
 		if (!raceInfo) {
 			this.raceInfo.itemId = param.itemId;
 		}
@@ -544,5 +564,21 @@ map {
 	width: 400rpx;
 	height: 100rpx;
 	font-size: 26rpx;
+}
+.cu-steps .cu-item:nth-of-type(2):before {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 0px;
+	width: calc(100%);
+	border-bottom: none;
+	left: calc(0px - (100%) / 2);
+	top: 40rpx;
+	z-index: 0;
+}
+
+.cu-steps .cu-item:nth-of-type(2):after {
+	width: calc(100%);
+	left: calc(0px - (100%) / 2);
 }
 </style>

@@ -1,11 +1,11 @@
 <template>
 	<view>
 		<cu-custom bgColor="bg-blue" :isBack="true"><block slot="content">排行</block></cu-custom>
-		<scroll-view class="container bg-blue">
+		<scroll-view class="container bg-blue" style="position: relative;">
 			
 			<view class="nav-box">
-				<view class="left-arrow" @click="viewClick('manRanking')"><text class="cuIcon-back"></text></view>
-				<view class="right-arrow" @click="viewClick('womanRanking')"><text class="cuIcon-right"></text></view>
+				<view class="left-arrow" @click="viewClick('manRanking')" style="position: fixed; top: 55%; left: 0;"><text class="cuIcon-back"></text></view>
+				<view class="right-arrow" @click="viewClick('womanRanking')" style="position: fixed; top: 55%; right: 0;"><text class="cuIcon-right"></text></view>
 			</view>
 			
 			<view class="user-box flex margin">
@@ -47,7 +47,7 @@
 									></view>
 									<view class="flex flex-direction margin-left padding-top-sm padding-bottom-sm">
 										<view class="text-black padding-bottom-xs">{{item.userName}}</view>
-										<view class="text-gray">{{item.completeDate.substring(0, 10)}}</view>
+										<!-- <view class="text-gray text-sm">{{item.completeDate}}</view> -->
 									</view>
 								</view>
 								<view class="flex align-center justify-end text-gray text-sm">{{item.spendTime}}</view>
@@ -71,10 +71,10 @@
 									></view>
 									<view class="flex flex-direction margin-left padding-top-sm padding-bottom-sm">
 										<view class="text-black padding-bottom-xs">{{item.userName}}</view>
-										<view class="text-gray">{{item.completeDate.substring(0, 10)}}</view>
+										<!-- <view class="text-gray text-sm">{{item.completeDate}}</view> -->
 									</view>
 								</view>
-								<view class="flex align-center justify-end text-gray text-sm">{{item.spendTime}}</view>
+								<!-- <view class="flex align-center justify-end text-gray text-sm">{{item.spendTime}}</view> -->
 							</view>
 						</view>
 						<view v-if="!womanData || womanData.length === 0" class="flex justify-center padding">暂无排名</view>
@@ -108,6 +108,9 @@ export default {
 			const that = this;
 			const token = uni.getStorageSync('id_token');
 			const userInfo = uni.getStorageSync('userInfo');
+			uni.showLoading({
+				title: '统计中，请稍后...'
+			})
 			uni.request({
 				url: `${constants.baseUrl}/races/items/${itemId}/ranking`,
 				method: 'GET',
@@ -118,9 +121,11 @@ export default {
 				success: res => {
 					const { data } = res.data;
 					const flag = false;
+					uni.hideLoading();
 					if (data) {
 						that.manData = data['男'];
 						if (that.manData) {
+							
 							that.manData.forEach((item, index) => {
 								console.log('item', item);
 								
@@ -213,6 +218,12 @@ export default {
 	},
 	onLoad(param) {
 		const {itemId} = param;
+		const userInfo = uni.getStorageSync('userInfo');
+		if (userInfo.gender === 1) {
+			this.toView = 'manRanking';
+		} else {
+			this.toView = 'womanRanking';
+		}
 		// 先加载用户的报名信息，如果用户没有报名，再调用loadCurrentUserInfo()方法从账户表里加载用户的基本信息
 		this.loadCurrentUserPlayInfo(itemId);
 		this.loadData(itemId);

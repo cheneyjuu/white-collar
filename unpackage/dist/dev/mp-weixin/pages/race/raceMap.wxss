@@ -78,4 +78,19 @@ map {
 	height: 100rpx;
 	font-size: 26rpx;
 }
+.cu-steps .cu-item:nth-of-type(2):before {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 0px;
+	width: calc(100%);
+	border-bottom: none;
+	left: calc(0px - (100%) / 2);
+	top: 40rpx;
+	z-index: 0;
+}
+.cu-steps .cu-item:nth-of-type(2):after {
+	width: calc(100%);
+	left: calc(0px - (100%) / 2);
+}
 

@@ -2680,6 +2680,7 @@ scroll-view.cu-steps .cu-item {
 	display: block;
 	font-size: 40upx;
 	line-height: 80upx;
+	z-index: 1;
 }
 
 .cu-steps .cu-item::before,
@@ -2690,9 +2691,9 @@ scroll-view.cu-steps .cu-item {
 	display: block;
 	position: absolute;
 	height: 0px;
-	width: calc(100% - 80upx);
+	width: calc(100%);
 	border-bottom: 1px solid #ccc;
-	left: calc(0px - (100% - 80upx) / 2);
+	left: calc(0px - (100%) / 2);
 	top: 40upx;
 	z-index: 0;
 }

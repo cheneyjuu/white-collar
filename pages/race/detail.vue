@@ -3,14 +3,14 @@
 		<cu-custom bgColor="bg-white" :isBack="true"><block slot="content">赛事详情</block></cu-custom>
 		<view class="container">
 			<view class="cover-image">
-				<image :src="raceInfo.coverImage" mode="aspectFill" style="width: 100%;"></image>
+				<image :src="raceInfo.coverImage" mode="widthFix" style="width: 100vw; height: 80vw;"></image>
 			</view>
 			<view class="item-header">
 				<view class="title text-xl">{{ raceInfo.title }}</view>
 				<view class="flex justify-between text-gray text-sm margin-top-sm">
 					<view class="cu-tag bg-red sm" v-if="raceInfo.type === 0">官方活动</view>
 					<view class="cu-tag bg-green sm" v-if="raceInfo.type === 1">自发活动</view>
-					<text>{{raceInfo.total}}人参赛</text>
+					<text>{{peopleCount}}人参赛</text>
 				</view>
 				<view class="flex text-gray text-sm margin-top-sm">
 					<text class="cuIcon cuIcon-time padding-right-xs"></text>
@@ -25,10 +25,9 @@
 				<view class="title padding-sm">
 					<view class="">
 						<text class="cuIcon-titles text-red"></text>赛事项目
-						<!-- <text class="padding-left text-sm text-gray">点击项目标题，开始比赛</text> -->
 					</view>
+					<view v-if="raceInfo.offLineFlag" class="text-gray">选择一条线路报名</view>
 				</view>
-				<!-- <view class="solid-line"></view> -->
 				<view class="item" v-for="(item, index) in itemList" :key="index">
 					<view>
 						<view class="item-title"><text class="text-xl padding-right-xs">{{ item.title }}</text></view>
@@ -38,39 +37,27 @@
 						<view class="amount text-red text-lg" v-if="item.freeFlag === true">免费</view>
 						<view class="amount text-red text-lg" v-if="item.freeFlag === false">{{ item.amounts }}/人</view>
 						
-						<view class="">
-							<button class="cu-btn round bg-orange sm margin-right-sm" @click="toViewRanking(item)" v-if="raceInfo.status >= 1">查看排行</button>
-							<button class="cu-btn round bg-red" @click="toRegister(item)" v-if="!item.isRegistered && raceInfo.status === 0">立即报名</button>
+						<view class="" v-if="!raceInfo.offLineFlag">
+							<button class="cu-btn round bg-orange sm margin-right-sm" @click="toViewRanking(item)" v-if="raceInfo.status >= 1 && item.registerFlag">查看排行</button>
+							<button class="cu-btn round bg-red" @click="toRegister(item)" v-if="!item.registerFlag && raceInfo.status === 0">立即报名</button>
 							<button class="cu-btn round bg-blue" v-if="item.isRegistered === true && raceInfo.status === 0">尚未开始</button>
-							<button class="cu-btn round bg-blue" @click="startRace(item)" v-if="item.isRegistered === true && raceInfo.status === 1 && !item.complete && !item.timeout">开始比赛</button>
-							<button class="cu-btn round bg-gray" v-if="item.complete === true || item.timeout === true">比赛完成</button>
+							<button class="cu-btn round bg-blue" @click="startRace(item)" v-if="item.registerFlag === true && raceInfo.status === 1 && item.completeFlag === false">开始比赛</button>
+							<button class="cu-btn round bg-gray" v-if="item.completeFlag === true">比赛完成</button>
+						</view>
+						<view v-if="raceInfo.offLineFlag">
+							<button class="cu-btn round bg-gradual-red" @click="toRegister(item)" v-if="!item.registerFlag && raceInfo.status === 0 && globalRegisterFlag === false">立即报名</button>
+							<button class="cu-btn round bg-gradual-blue" @click="toRegister(item)" v-if="item.registerFlag" style="letter-spacing: 8rpx;">已报名</button>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="item-body margin-top-sm margin-bottom">
 				<view class="title padding-sm"><text class="cuIcon-titles text-red"></text>赛事详情</view>
-				<view class="desc padding-sm">
+				<view class="desc">
 					<jyf-parser :html="raceInfo.content" ref="article"></jyf-parser>
 				</view>
 			</view>
-			<!-- <view class="cu-tabbar-height margin-bottom-sm"></view> -->
 		</view>
-		<!-- <view class="cu-bar bg-white tabbar border shop foot">
-			<button class="action" :class="activity.userLikeFlag === true ? 'text-red' : ''" @click="onInteractive(activity, 'LIKE')">
-				<view :class="activity.userLikeFlag === true ? 'cuIcon-appreciatefill' : 'cuIcon-appreciate'"></view>
-				点赞
-			</button>
-			<button class="action" :class="activity.userFavorFlag === true ? 'text-red' : ''" @click="onInteractive(activity, 'FAVOR')">
-				<view :class="activity.userFavorFlag === true ? 'cuIcon-favorfill' : 'cuIcon-favor'"></view>
-				收藏
-			</button>
-			<button class="action" open-type="share">
-				<view class="cuIcon-share"></view>
-				分享
-			</button>
-			<view class="bg-gradual-red submit" @click="startRace()">开始比赛</view>
-		</view> -->
 		<view class="cu-modal" :class="modalName == 'DialogModal1' ? 'show' : ''">
 			<view class="cu-dialog">
 				<view class="cu-bar bg-white justify-end">
@@ -84,6 +71,22 @@
 					<view class="action">
 						<button class="cu-btn" @tap="hideModal">取消</button>
 						<button class="cu-btn bg-red margin-left" @tap="startRace(itemInfo)">去比赛</button>
+					</view>
+				</view>
+			</view>
+		</view>
+		
+		<view class="cu-modal" :class="modalName2 == 'DialogModal2' ? 'show' : ''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">操作提示</view>
+					<view class="action" @tap="hideModal"><text class="cuIcon-close text-red"></text></view>
+				</view>
+				<view class="padding-xl">您还未授权，请授权登录！</view>
+				<view class="cu-bar bg-white justify-end">
+					<view class="action">
+						<button class="cu-btn line-green text-green" @tap="hideModal2">取消</button>
+						<button class="cu-btn bg-green margin-left" open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">确定</button>
 					</view>
 				</view>
 			</view>
@@ -104,16 +107,150 @@ export default {
 			raceInfo: {},
 			itemList: {},
 			modalName: null,
+			modalName2: null,
 			itemInfo: {},
 			itemId: '',
 			entryStartDate: null,
 			entryEndDate: null,
 			matchStartDate: null,
 			matchEndDate: null,
-			status: null
+			status: null,
+			globalRegisterFlag: false,
+			peopleCount: 0
 		};
 	},
 	methods: {
+		hideModal2(e) {
+			this.modalName2 = null;
+		},
+		wxGetUserInfo() {
+			let that = this;
+			uni.getUserInfo({
+				provider: 'weixin',
+				success: function(infoRes) {
+					console.log({
+						userinfo: infoRes
+					});
+					that.loginInfo = infoRes;
+					that.nickName = infoRes.userInfo.nickName;
+					that.avatarUrl = infoRes.userInfo.avatarUrl;
+					try {
+						uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
+						that.login();
+					} catch (e) {}
+				},
+				fail(res) {}
+			});
+		},
+		login() {
+			uni.removeStorageSync('sessionId');
+			let that = this;
+			const isCanUse = uni.getStorageSync('isCanUse');
+			if (isCanUse === false) {
+				uni.showLoading({
+					title: '登录中...'
+				});
+				uni.login({
+					provider: 'weixin',
+					success: loginRes => {
+						if (!that.isCanUse) {
+							//非第一次授权获取用户信息
+							uni.getUserInfo({
+								provider: 'weixin',
+								success: function(infoRes) {
+									console.log({
+										getUserInfo: infoRes
+									});
+									that.loginInfo = infoRes;
+								}
+							});
+						}
+						that.exchangeInfo(loginRes.code);
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+			}
+		},
+		exchangeInfo(code) {
+			const that = this;
+			uni.request({
+				url: `${constants.baseUrl}/global/login/app`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json'
+				},
+				data: {
+					code: code,
+					encryptedData: this.loginInfo.encryptedData,
+					iv: this.loginInfo.iv
+				},
+				success: res => {
+					const data = res.data;
+					// retry
+					if (res.statusCode === 500) {
+						this.wxGetUserInfo();
+						return;
+					}
+					console.dir(data);
+					that.updateAccount(data);
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		updateAccount(payload) {
+			console.log('update account');
+			console.log(payload);
+			const that = this;
+			uni.request({
+				url: `${constants.baseUrl}/global/account`,
+				method: 'POST',
+				data: payload,
+				success: res => {
+					console.log(res);
+					that.userInfo = payload;
+					that.authentication(payload.openId);
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		authentication(openId) {
+			const that = this;
+			uni.request({
+				url: `${constants.baseUrl}/authenticate`,
+				data: {
+					username: openId,
+					password: openId
+				},
+				method: 'POST',
+				header: {
+					'content-type': 'application/json'
+				},
+				success: res => {
+					that.token = res.data.id_token;
+					that.userInfo.avatarStyle = `background-image:url(${that.userInfo.avatarUrl})`;
+					console.log(that.userInfo.avatarStyle);
+					uni.setStorage({
+						key: 'userInfo',
+						data: that.userInfo
+					})
+					uni.setStorage({
+						key: 'id_token',
+						data: that.token,
+						success: () => {
+							uni.hideLoading();
+						}
+					});
+					that.modalName2 = null;
+					console.log('raceId', that.raceId);
+					uni.navigateTo({
+						url: '/pages/race/bindInfo/bindInfo?raceId=' + that.raceId
+					})
+				}
+			});
+		},
 		loadData(raceId) {
 			const token = uni.getStorageSync('id_token');
 			uni.request({
@@ -142,7 +279,7 @@ export default {
 			const token = uni.getStorageSync('id_token');
 			const userInfo = uni.getStorageSync('userInfo');
 			uni.request({
-				url: `${constants.baseUrl}/races/${raceId}/items`,
+				url: `${constants.baseUrl}/races/${raceId}/items/${userInfo.openId}`,
 				method: 'GET',
 				header: {
 					'content-type': 'application/json',
@@ -162,11 +299,14 @@ export default {
 					console.log('load item data');
 					this.itemList = data;
 					this.itemList.forEach(item => {
+						console.log('item info');
+						console.log(item);
 						item.isRegistered = false;
 						item.playerInfoList.forEach(user => {
 							if (user.login === userInfo.openId) {
 								item.isRegistered = true;
-								item.complete = user.completeFlag;
+								that.globalRegisterFlag = true;
+								// item.complete = user.completeFlag;
 								return;
 							}
 						});
@@ -177,21 +317,22 @@ export default {
 						const matchEnd = new Date(that.matchEndDate).getTime();
 						console.log(todayStr, that.entryStartDate, that.entryEndDate, todayStr >=that.entryStartDate, todayStr <= that.entryEndDate );
 						// 报名中
-						if (todayStr >= that.entryStartDate && todayStr <= that.entryEndDate) {
-							that.raceInfo.status = 0;
-						} else if (todayStr > that.entryEndDate && todayStr <= that.matchEndDate) {
-							that.raceInfo.status = 1;
-						} else if (todayStr > that.matchEndDate) {
-							that.raceInfo.status = 2;
-						}
+						// if (todayStr >= that.entryStartDate && todayStr <= that.entryEndDate) {
+						// 	that.raceInfo.status = 0;
+						// } else if (todayStr > that.entryEndDate && todayStr <= that.matchEndDate) {
+						// 	that.raceInfo.status = 1;
+						// } else if (todayStr > that.matchEndDate) {
+						// 	that.raceInfo.status = 2;
+						// }
 					});
 					console.log(data);
 		
-					let total = 0;
 					for (let item of this.itemList) {
-						total += item.playerInfoList.length;
+						if (item.playerInfoList && item.playerInfoList.length > 0) {
+							that.peopleCount += item.playerInfoList.length;
+						}
 					}
-					this.raceInfo.total = total;
+					
 					console.log(this.itemList);
 				},
 				fail: () => {},
@@ -200,7 +341,7 @@ export default {
 		},
 		toRegister(item) {
 			const {itemId} = item;
-			const {raceId} = this.raceInfo;
+			const {raceId, offLineFlag} = this.raceInfo;
 			this.itemId = itemId;
 			const userInfo = uni.getStorageSync('userInfo');
 			let isJoined = false;
@@ -220,35 +361,52 @@ export default {
 				return;
 			}
 			uni.navigateTo({
-				url: `/pages/race/register?raceId=${raceId.id}&itemId=${itemId.id}`
+				url: `/pages/race/register?raceId=${raceId.id}&itemId=${itemId.id}&offLineFlag=${offLineFlag}`
 			})
 		},
 		startRace(item) {
-			const {itemId} = item;
-			const userInfo = uni.getStorageSync('userInfo');
-			let isJoined = false;
-			if (userInfo) {
-				const playerInfoList = item.playerInfoList;
-				playerInfoList.forEach(function(user) {
-					if (user.login === userInfo.openId) {
-						console.log(user);
-						isJoined = true;
+			const that = this;
+			wx.getSetting({
+				success:function(res){
+					if (res.authSetting['scope.userLocation'] === false) {
+						wx.showModal({
+						title: '您未开启地理位置授权',
+						content: '授权后才能开始比赛',
+						success: res => {
+						  if (res.confirm) {
+							wx.openSetting();
+						  }
+						}
+					  })
+					} else {
+						const {itemId} = item;
+						const userInfo = uni.getStorageSync('userInfo');
+						let isJoined = false;
+						if (userInfo) {
+							const playerInfoList = item.playerInfoList;
+							playerInfoList.forEach(function(user) {
+								if (user.login === userInfo.openId) {
+									console.log(user);
+									isJoined = true;
+								}
+							});
+						}
+						
+						const {lng, lat, raceId} = that.raceInfo;
+						that.modalName = null;
+						const checkInType = that.raceInfo.checkInType ? that.raceInfo.checkInType : 'IN_ORDER';
+						if (checkInType === 'IN_ORDER') {
+							uni.navigateTo({
+								url: `/pages/race/raceMap?lng=${lng}&lat=${lat}&raceId=${raceId.id}&itemId=${itemId.id}`
+							})
+						} else {
+							uni.navigateTo({
+								url: `/pages/race/randomMap?lng=${lng}&lat=${lat}&raceId=${raceId.id}&itemId=${itemId.id}`
+							})
+						}
 					}
-				});
-			}
-			if (!isJoined){
-				uni.showToast({
-					icon: 'none',
-					title: '您未报名!'
-				})
-				return;
-			}
-			
-			const {lng, lat, raceId} = this.raceInfo;
-			this.modalName = null;
-			uni.navigateTo({
-				url: `/pages/race/raceMap?lng=${lng}&lat=${lat}&raceId=${raceId.id}&itemId=${itemId.id}`
-			})
+				}
+			});
 		},
 		viewItem(item) {
 			this.itemInfo = item;
@@ -276,20 +434,25 @@ export default {
 	onLoad(param) {
 		const raceId = param.raceId;
 		this.raceId = raceId;
+		
 	},
 	onShow(param) {
 		if (this.raceId) {
+			this.peopleCount = 0;
 			this.loadData(this.raceId);
 			this.loadItemData(this.raceId);
 		}
-		
-		// const targetLng = 121.462881;
-		// const targetLat = 31.213382;
-		// const currentLng = 121.463090;
-		// const currentLat = 31.218169;
-		
-		// const distance = this.getDistance(currentLat, currentLng, targetLat, targetLng);
-		// console.log({distance});
+		const token = uni.getStorageSync('id_token');
+		if (!token) {
+			this.modalName2 = 'DialogModal2';
+		} else {
+			wx.getLocation({
+				type: 'gcj02',
+				success:function(){
+					console.log('地理位置获取成功');
+				}
+			});
+		}
 	},
 	onShareAppMessage() {
 		return {

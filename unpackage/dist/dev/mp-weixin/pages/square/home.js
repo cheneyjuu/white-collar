@@ -721,9 +721,34 @@ var _default = { name: 'square', data: function data() {return { token: uni.getS
       uni.reLaunch({
         url: '/pages/mine/home' });
 
+    },
+    authentication: function authentication(openId) {
+      var that = this;
+      uni.request({
+        url: "".concat(constants.baseUrl, "/authenticate"),
+        data: {
+          username: openId,
+          password: openId },
+
+        method: 'POST',
+        header: {
+          'content-type': 'application/json' },
+
+        success: function success(res) {
+          that.token = res.data.id_token;
+          uni.setStorage({
+            key: 'id_token',
+            data: that.token,
+            success: function success() {
+
+            } });
+
+        } });
+
     } },
 
   onShow: function onShow() {
+    var userInfo = uni.getStorageSync('userInfo');
     var token = uni.getStorageSync('id_token');
     if (!token) {
       this.modalName = 'DialogModal1';
@@ -733,7 +758,10 @@ var _default = { name: 'square', data: function data() {return { token: uni.getS
     this.loadPolicyData();
     this.loadTopicData();
     this.loadBuildingData();
-
+    if (userInfo) {
+      var openId = userInfo.openId;
+      this.authentication(openId);
+    }
   } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

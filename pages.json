@@ -7,6 +7,11 @@
 			"path": "pages/race/raceMap",
 			"style": {
 			}
+		},
+		{
+			"path": "pages/race/randomMap",
+			"style": {
+			}
 		},{
 			"path": "pages/race/routeMap",
 			"style": {}
@@ -116,7 +121,11 @@
 				// "navigationBarTitleText": "投票"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/race/bindInfo/bindInfo",
+            "style" : {}
+        }
+    ],
 	"globalStyle": {
 		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
@@ -161,12 +170,17 @@
 			{
 				"name":"赛事详情",
 				"path":"pages/race/detail",
-				"query":"raceId=354836885279744"
+				"query":"raceId=377271462403584"
 			},
 			{
 				"name":"赛事轨迹",
 				"path":"pages/race/raceMap",
-				"query":"itemId=377271873445376"
+				"query":"itemId=363717275424640"
+			},
+			{
+				"name":"随机打卡-轨迹",
+				"path":"pages/race/randomMap",
+				"query":"itemId=363717275424640"
 			},
 			{
 				"name":"赛事报名",

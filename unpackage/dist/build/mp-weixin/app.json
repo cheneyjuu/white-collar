@@ -2,6 +2,8 @@
   "pages": [
     "pages/square/home",
     "pages/race/raceMap",
+    "pages/race/randomMap",
+    "pages/race/routeMap",
     "pages/race/race",
     "pages/race/detail",
     "pages/race/register",

@@ -24,8 +24,8 @@
 					</button>
 					<!-- <view class="bg-gradual-red submit" @click="activityRegister(activity.activityId)" v-if="activity.outOfDateFlag === false">立即报名</view>
 					<view class="bg-gray submit" v-if="activity.outOfDateFlag === true">已过期</view> -->
-					<view class="bg-gradual-red submit" @click="toRegister()" v-if="activity.registerFlag === false && !activity.outOfDateFlag">立即报名</view>
-					<view class="bg-gradual-blue submit" v-if="activity.registerFlag === true && !activity.outOfDateFlag">已报名</view>
+					<view class="bg-gradual-red submit" @click="toRegister()" v-if="(activity.registerFlag === false && !activity.outOfDateFlag) || activity.activityId.id === '395550105019392'">立即报名</view>
+					<view class="bg-gradual-blue submit" v-if="activity.registerFlag === true && !activity.outOfDateFlag && activity.activityId.id !== '395550105019392'">已报名</view>
 					<view class="bg-gray submit" v-if="activity.outOfDateFlag === true">已过期</view>
 				</view>
 			</view>
@@ -133,21 +133,23 @@ export default {
 				});
 				return;
 			}
-			uni.navigateTo({
-				url: '/pages/activity/signup?activityId=' + that.activity.activityId.id,
-			})
-			// this.recordPresonInfo();
-			// wx.navigateToMiniProgram({
-			//   appId: 'wxc364791141684366',
-			//   path: 'pages/match/detail/index.html?matchid=6587',
-			//   extraData: {},
-			//   envVersion: 'release',
-			//   success(res) {
-			//     console.log('跳转成功');
-			// 	console.log(res);
-				
-			//   }
-			// })
+			if (that.activity.activityId && that.activity.activityId.id === '395550105019392') {
+				this.recordPresonInfo();
+				wx.navigateToMiniProgram({
+				  appId: 'wxc364791141684366',
+				  path: '/pages/match/detail/index?matchid=7665',
+				  extraData: {},
+				  envVersion: 'release',
+				  success(res) {
+					console.log('跳转成功');
+					console.log(res);
+				  }
+				})
+			} else {
+				uni.navigateTo({
+					url: '/pages/activity/signup?activityId=' + that.activity.activityId.id,
+				})
+			}
 		},
 		recordPresonInfo() {
 			const token = uni.getStorageSync('id_token');

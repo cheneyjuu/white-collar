@@ -3,6 +3,10 @@
 		<cu-custom bgColor="bg-white" :isBack="true"><block slot="content">赛事报名</block></cu-custom>
 		<view class="bg-white padding-bottom-sm">
 			<form class="margin-top-sm">
+				<view class="cu-form-group" v-if="offLineFlag">
+					<view class="title required">邀请码</view>
+					<input placeholder="请填写邀请码" name="input" @input="inviteCodeInput"></input>
+				</view>
 				<view class="cu-form-group">
 					<view class="title required">姓名</view>
 					<input placeholder="报名人姓名" name="input" @input="userNameInput"></input>
@@ -23,7 +27,7 @@
 						</view>
 					</picker>
 				</view>
-				<view class="cu-form-group">
+				<view class="cu-form-group" v-if="!offLineFlag">
 					<view class="title required">街道</view>
 					<picker @change="streetPickerChange" :value="index" :range="streetPicker">
 						<view class="picker">
@@ -32,14 +36,14 @@
 					</picker>
 				</view>
 				<view class="cu-form-group">
-					<view class="title padding-left-sm">企业</view>
-					<input placeholder="企业" name="input" @input="companyInput"></input>
+					<view class="title padding-left-sm">单位</view>
+					<input placeholder="单位" name="input" @input="companyInput"></input>
 				</view>
 				<view class="cu-form-group">
 					<view class="title required">联系地址</view>
 					<input placeholder="联系地址" name="input" @input="addressInput"></input>
 				</view>
-				<view class="cu-form-group margin-top">
+				<view class="cu-form-group margin-top" v-if="offLineFlag && offLineFlag === true">
 					<view class="title required">衣服尺码</view>
 					<picker @change="PickerChange" :value="index" :range="picker">
 						<view class="picker">
@@ -99,13 +103,17 @@ import * as constants from '@/utils/constant.js';
 				streetPicker: ["南京东路街道","外滩街道","半淞园路街道","小东门街道","豫园街道","老西门街道","五里桥街道","打浦桥街道","淮海中路街道","瑞金二路街道"],
 				streetIndex: -1,
 				radio: '',
-				agree: false
+				agree: false,
+				offLineFlag: false
 			};
 		},
 		methods: {
+			inviteCodeInput: function(e) {
+				this.payload.inviteCode = e.detail.value;
+				this.payload.offLineFlag = true;
+			},
 			userNameInput(e) {
 				this.payload.userName = e.detail.value;
-				
 			},
 			phoneNumberInput(e) {
 				const phoneNumber = e.detail.value;
@@ -171,7 +179,7 @@ import * as constants from '@/utils/constant.js';
 				const token = uni.getStorageSync('id_token');
 				const phoneRegex = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/;
 				const idCardRegex = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
-				const { userName, phoneNumber, idCard, contactAddress, clothesSize } = this.payload;
+				const { userName, phoneNumber, idCard, contactAddress, clothesSize, inviteCode } = this.payload;
 				if (!phoneRegex.test(phoneNumber)) {
 					uni.showToast({
 						icon: 'none',
@@ -200,12 +208,21 @@ import * as constants from '@/utils/constant.js';
 					})
 					return;
 				}
-				if (!clothesSize) {
-					uni.showToast({
-						icon: 'none',
-						title: '请选择衣服尺码!'
-					})
-					return;
+				if (that.offLineFlag) {
+					if (!clothesSize) {
+						uni.showToast({
+							icon: 'none',
+							title: '请选择衣服尺码!'
+						})
+						return;
+					}
+					if (!inviteCode) {
+						uni.showToast({
+							icon: 'none',
+							title: '请输入邀请码!'
+						})
+						return;
+					}
 				}
 				// 15位身份证号码：第7、8位为出生年份(两位数)，第9、10位为出生月份，第11、12位代表出生日期，第15位代表性别，奇数为男，偶数为女。
 				// 18位身份证号码：第7、8、9、10位为出生年份(四位数)，第11、第12位为出生月份，第13、14位代表出生日期，第17位代表性别，奇数为男，偶数为女。
@@ -271,9 +288,11 @@ import * as constants from '@/utils/constant.js';
 			console.log(params);
 			const raceId = params.raceId;
 			const itemId = params.itemId;
+			this.offLineFlag = JSON.parse(params.offLineFlag);
 			this.payload.raceId = {id: raceId};
 			this.payload.itemId = {id: itemId};
-			console.log(raceId, itemId, this.payload);
+			console.log('offline flag');
+			console.log(this.offLineFlag);
 		}
 	};
 </script>
