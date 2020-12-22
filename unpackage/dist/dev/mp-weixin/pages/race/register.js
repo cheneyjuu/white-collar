@@ -312,7 +312,7 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
 var _default = { data: function data() {return { token: uni.getStorageSync('id_token'), modalName: null, payload: {}, index: -1, picker: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'], genderIndex: -1, genderPicker: ['男', '女'], gender: '', streetPicker: ["南京东路街道", "外滩街道", "半淞园路街道", "小东门街道", "豫园街道", "老西门街道", "五里桥街道", "打浦桥街道", "淮海中路街道", "瑞金二路街道"], streetIndex: -1, radio: '', agree: false, offLineFlag: false };}, methods: { inviteCodeInput: function inviteCodeInput(e) {this.payload.inviteCode = e.detail.value;this.payload.offLineFlag = true;}, userNameInput: function userNameInput(e) {this.payload.userName = e.detail.value;}, phoneNumberInput: function phoneNumberInput(e) {var phoneNumber = e.detail.value;this.payload.phoneNumber = phoneNumber;}, idCardInput: function idCardInput(e) {this.payload.idCard = e.detail.value;var idCard = e.detail.value;var lastNum = ''; // if (idCard.length === 15) {
       // 	lastNum = idCard.substring(14, 15);
       // }
-      if (idCard.length === 18) {lastNum = idCard.substring(16, 17);}var gender = '';if (lastNum === 'x' || lastNum === 'X') {gender = '女';}if (lastNum) {if (parseInt(lastNum, 10) % 2 === 0) {this.genderIndex = 1;this.payload.gender = '女';} else {this.genderIndex = 0;this.payload.gender = '男';}}}, companyInput: function companyInput(e) {this.payload.company = e.detail.value;}, addressInput: function addressInput(e) {this.payload.contactAddress = e.detail.value;}, PickerChange: function PickerChange(e) {this.index = e.detail.value;console.log(this.picker[this.index]);this.payload.clothesSize = this.picker[this.index];}, genderPickerChange: function genderPickerChange(e) {this.genderIndex = e.detail.value;this.payload.gender = this.genderPicker[this.genderIndex];}, streetPickerChange: function streetPickerChange(e) {this.streetIndex = e.detail.value;this.payload.street = this.streetPicker[this.streetIndex];}, RadioChange: function RadioChange(e) {console.log(this.agree);this.agree = !this.agree;}, hideModal: function hideModal(e) {this.modalName = null;}, gotoPrev: function gotoPrev() {uni.navigateBack({ delta: 1 });}, activityRegister: function activityRegister() {var _this = this;var that = this;var token = uni.getStorageSync('id_token');var phoneRegex = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/;var idCardRegex = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;var _this$payload = this.payload,userName = _this$payload.userName,phoneNumber = _this$payload.phoneNumber,idCard = _this$payload.idCard,contactAddress = _this$payload.contactAddress,clothesSize = _this$payload.clothesSize,inviteCode = _this$payload.inviteCode;if (!phoneRegex.test(phoneNumber)) {
+      if (idCard.length === 18) {lastNum = idCard.substring(16, 17);}var gender = '';if (lastNum === 'x' || lastNum === 'X') {gender = '女';}if (lastNum) {if (parseInt(lastNum, 10) % 2 === 0) {this.genderIndex = 1;this.payload.gender = '女';} else {this.genderIndex = 0;this.payload.gender = '男';}}}, companyInput: function companyInput(e) {this.payload.company = e.detail.value;}, addressInput: function addressInput(e) {this.payload.contactAddress = e.detail.value;}, PickerChange: function PickerChange(e) {this.index = e.detail.value;console.log(this.picker[this.index]);this.payload.clothesSize = this.picker[this.index];}, genderPickerChange: function genderPickerChange(e) {this.genderIndex = e.detail.value;this.payload.gender = this.genderPicker[this.genderIndex];}, streetPickerChange: function streetPickerChange(e) {this.streetIndex = e.detail.value;this.payload.street = this.streetPicker[this.streetIndex];}, RadioChange: function RadioChange(e) {console.log(this.agree);this.agree = !this.agree;}, hideModal: function hideModal(e) {this.modalName = null;}, gotoPrev: function gotoPrev() {uni.navigateBack({ delta: 1 });}, activityRegister: function activityRegister() {var _this = this;var that = this;var token = uni.getStorageSync('id_token');var phoneRegex = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/;var idCardRegex = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;var _this$payload = this.payload,userName = _this$payload.userName,phoneNumber = _this$payload.phoneNumber,idCard = _this$payload.idCard,contactAddress = _this$payload.contactAddress,company = _this$payload.company,clothesSize = _this$payload.clothesSize;if (!phoneRegex.test(phoneNumber)) {
         uni.showToast({
           icon: 'none',
           title: '输入的手机号码有误!' });
@@ -340,22 +340,30 @@ var _default = { data: function data() {return { token: uni.getStorageSync('id_t
 
         return;
       }
-      if (that.offLineFlag) {
-        if (!clothesSize) {
-          uni.showToast({
-            icon: 'none',
-            title: '请选择衣服尺码!' });
+      if (!company || company.length < 1) {
+        uni.showToast({
+          icon: 'none',
+          title: '请输入单位!' });
 
-          return;
-        }
-        if (!inviteCode) {
-          uni.showToast({
-            icon: 'none',
-            title: '请输入邀请码!' });
-
-          return;
-        }
+        return;
       }
+      // if (that.offLineFlag) {
+      if (!clothesSize) {
+        uni.showToast({
+          icon: 'none',
+          title: '请选择衣服尺码!' });
+
+        return;
+      }
+
+      // 	if (!inviteCode) {
+      // 		uni.showToast({
+      // 			icon: 'none',
+      // 			title: '请输入邀请码!'
+      // 		})
+      // 		return;
+      // 	}
+      // }
       // 15位身份证号码：第7、8位为出生年份(两位数)，第9、10位为出生月份，第11、12位代表出生日期，第15位代表性别，奇数为男，偶数为女。
       // 18位身份证号码：第7、8、9、10位为出生年份(四位数)，第11、第12位为出生月份，第13、14位代表出生日期，第17位代表性别，奇数为男，偶数为女。
       var lastNum = '';

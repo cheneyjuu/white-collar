@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   mescrollUni: function() {
-    return Promise.all(/*! import() | components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/components/mescroll-uni/mescroll-uni.vue */ 312))
+    return Promise.all(/*! import() | components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-uni")]).then(__webpack_require__.bind(null, /*! @/components/mescroll-uni/mescroll-uni.vue */ 318))
   }
 }
 var render = function() {
@@ -232,7 +232,7 @@ var _mescrollMixins = _interopRequireDefault(__webpack_require__(/*! @/component
 //
 //
 //
-var MescrollUni = function MescrollUni() {Promise.all(/*! require.ensure | components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-uni")]).then((function () {return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-uni.vue */ 312));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { mixins: [_mescrollMixins.default], // 使用mixin
+var MescrollUni = function MescrollUni() {Promise.all(/*! require.ensure | components/mescroll-uni/mescroll-uni */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/mescroll-uni/mescroll-uni")]).then((function () {return resolve(__webpack_require__(/*! @/components/mescroll-uni/mescroll-uni.vue */ 318));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { mixins: [_mescrollMixins.default], // 使用mixin
   components: { MescrollUni: MescrollUni }, data: function data() {return { token: uni.getStorageSync('id_token'), CustomBar: this.CustomBar, TabCur: 0, upOption: { page: { num: -1, size: 10 // 每页数据的数量,默认10
         }, noMoreSize: 5, // 配置列表的总数量要大于等于5条才显示'-- END --'的提示
         empty: { tip: '暂无相关数据' } }, // 列表数据

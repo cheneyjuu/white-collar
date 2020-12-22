@@ -92,7 +92,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   jyfParser: function() {
-    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 324))
+    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 330))
   }
 }
 var render = function() {
@@ -205,7 +205,7 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
 //
 //
 //
-var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 324));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { jyfParser: jyfParser }, data: function data() {return { token: uni.getStorageSync('id_token'), topic: {}, outLink: '' };}, methods: { loadTopicInfo: function loadTopicInfo(topicId) {var _this = this;uni.request({ url: "".concat(constants.baseUrl, "/topic/").concat(topicId, "/details"), method: 'GET', header: { 'content-type': 'application/json', Authorization: 'Bearer ' + this.token }, success: function success(res) {var data = res.data.data;data.content = data.content.replace(/<table[^>]*>/gi, function (match, capture) {return match.replace(/width=\"(.*)\"/gi, '');});_this.topic = data;}, fail: function fail() {}, complete: function complete() {} });}, onShare: function onShare() {uni.showShareMenu({ success: function success() {console.log('share success');
+var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 330));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { jyfParser: jyfParser }, data: function data() {return { token: uni.getStorageSync('id_token'), topic: {}, outLink: '' };}, methods: { loadTopicInfo: function loadTopicInfo(topicId) {var _this = this;uni.request({ url: "".concat(constants.baseUrl, "/topic/").concat(topicId, "/details"), method: 'GET', header: { 'content-type': 'application/json', Authorization: 'Bearer ' + this.token }, success: function success(res) {var data = res.data.data;data.content = data.content.replace(/<table[^>]*>/gi, function (match, capture) {return match.replace(/width=\"(.*)\"/gi, '');});_this.topic = data;}, fail: function fail() {}, complete: function complete() {} });}, onShare: function onShare() {uni.showShareMenu({ success: function success() {console.log('share success');
         } });
 
     } },

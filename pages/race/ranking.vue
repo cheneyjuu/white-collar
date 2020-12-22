@@ -50,7 +50,7 @@
 										<!-- <view class="text-gray text-sm">{{item.completeDate}}</view> -->
 									</view>
 								</view>
-								<view class="flex align-center justify-end text-gray text-sm">{{item.spendTime}}</view>
+								<!-- <view class="flex align-center justify-end text-gray text-sm">{{item.spendTime}}</view> -->
 							</view>
 						</view>
 						<view v-if="!manData || manData.length === 0" class="flex justify-center padding">暂无排名</view>

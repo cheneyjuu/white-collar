@@ -8,8 +8,10 @@
 	position: absolute;
 	width: 100%;
 	top: 20%;
-	border-top-left-radius: 10rpx;
-	border-top-right-radius: 10rpx;
+	-webkit-border-top-left-radius: 10rpx;
+	        border-top-left-radius: 10rpx;
+	-webkit-border-top-right-radius: 10rpx;
+	        border-top-right-radius: 10rpx;
 	background-color: #ffffff;
 	display: -webkit-box;
 	display: -webkit-flex;

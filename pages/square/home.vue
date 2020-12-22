@@ -314,6 +314,13 @@ export default {
 				this.modalName = 'DialogModal1';
 				return;
 			}
+			const pagePath = item.pagePath;
+			console.log(pagePath);
+			if (pagePath && pagePath.length > 0) {
+				uni.navigateTo({
+					url: '/pages/square/test-web-view/test-web-view?url=' + pagePath
+				})
+			}
 			if (item.channel === 'ACTIVITY') {
 				uni.navigateTo({
 					url: `/pages/activity/details?activityId=${item.uniId}`

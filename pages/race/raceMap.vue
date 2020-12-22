@@ -223,7 +223,7 @@ export default {
 								const distance = that.getDistance(latitude, longitude, lat, lng);
 								const checkinedIndex = that.currentIndex;
 								console.log(distance, checkinedIndex, that.checkinIndexList.findIndex(value => value === checkinedIndex) === -1);
-								if (distance <= 150 && that.checkinIndexList.findIndex(value => value === checkinedIndex) === -1) {
+								if (distance <= 120 && that.checkinIndexList.findIndex(value => value === checkinedIndex) === -1) {
 									that.enableScroll = false;
 									that.showDialog = true;
 									that.lng = lng;

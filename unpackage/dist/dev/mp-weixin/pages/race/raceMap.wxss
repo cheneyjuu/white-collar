@@ -11,7 +11,8 @@ map {
 	position: relative;
 	width: 180rpx;
 	height: 180rpx;
-	border-radius: 90rpx;
+	-webkit-border-radius: 90rpx;
+	        border-radius: 90rpx;
 	display: -webkit-inline-box;
 	display: -webkit-inline-flex;
 	display: inline-flex;
@@ -55,8 +56,10 @@ map {
 	display: -webkit-flex;
 	display: flex;
 	/* border: 1px solid #555; */
-	border-radius: 8rpx;
-	box-shadow: 1rpx 1rpx 8rpx #888;
+	-webkit-border-radius: 8rpx;
+	        border-radius: 8rpx;
+	-webkit-box-shadow: 1rpx 1rpx 8rpx #888;
+	        box-shadow: 1rpx 1rpx 8rpx #888;
 	box-reflect: below 5px linear-gradient(transparent 60%, rgba(0,0,0,.3));
 }
 .triangle::after {
@@ -66,9 +69,11 @@ map {
 	content: '';
 	width: 100rpx;
 	height: 100rpx;
-	border-radius: 8rpx;
+	-webkit-border-radius: 8rpx;
+	        border-radius: 8rpx;
 	background-color: #FFFFFF;
-	box-shadow: 1rpx 1rpx 8rpx #888;
+	-webkit-box-shadow: 1rpx 1rpx 8rpx #888;
+	        box-shadow: 1rpx 1rpx 8rpx #888;
 	-webkit-transform: rotate(45deg);
 	        transform: rotate(45deg);
 	z-index: 0;

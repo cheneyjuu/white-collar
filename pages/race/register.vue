@@ -3,10 +3,10 @@
 		<cu-custom bgColor="bg-white" :isBack="true"><block slot="content">赛事报名</block></cu-custom>
 		<view class="bg-white padding-bottom-sm">
 			<form class="margin-top-sm">
-				<view class="cu-form-group" v-if="offLineFlag">
+				<!-- <view class="cu-form-group" v-if="offLineFlag">
 					<view class="title required">邀请码</view>
 					<input placeholder="请填写邀请码" name="input" @input="inviteCodeInput"></input>
-				</view>
+				</view> -->
 				<view class="cu-form-group">
 					<view class="title required">姓名</view>
 					<input placeholder="报名人姓名" name="input" @input="userNameInput"></input>
@@ -36,7 +36,7 @@
 					</picker>
 				</view>
 				<view class="cu-form-group">
-					<view class="title padding-left-sm">单位</view>
+					<view class="title required">单位</view>
 					<input placeholder="单位" name="input" @input="companyInput"></input>
 				</view>
 				<view class="cu-form-group">
@@ -179,7 +179,7 @@ import * as constants from '@/utils/constant.js';
 				const token = uni.getStorageSync('id_token');
 				const phoneRegex = /^(?:(?:\+|00)86)?1(?:(?:3[\d])|(?:4[5-7|9])|(?:5[0-3|5-9])|(?:6[5-7])|(?:7[0-8])|(?:8[\d])|(?:9[1|8|9]))\d{8}$/;
 				const idCardRegex = /(^\d{8}(0\d|10|11|12)([0-2]\d|30|31)\d{3}$)|(^\d{6}(18|19|20)\d{2}(0\d|10|11|12)([0-2]\d|30|31)\d{3}(\d|X|x)$)/;
-				const { userName, phoneNumber, idCard, contactAddress, clothesSize, inviteCode } = this.payload;
+				const { userName, phoneNumber, idCard, contactAddress, company, clothesSize } = this.payload;
 				if (!phoneRegex.test(phoneNumber)) {
 					uni.showToast({
 						icon: 'none',
@@ -208,22 +208,30 @@ import * as constants from '@/utils/constant.js';
 					})
 					return;
 				}
-				if (that.offLineFlag) {
-					if (!clothesSize) {
-						uni.showToast({
-							icon: 'none',
-							title: '请选择衣服尺码!'
-						})
-						return;
-					}
-					if (!inviteCode) {
-						uni.showToast({
-							icon: 'none',
-							title: '请输入邀请码!'
-						})
-						return;
-					}
+				if (!company || company.length < 1) {
+					uni.showToast({
+						icon: 'none',
+						title: '请输入单位!'
+					})
+					return;
 				}
+				// if (that.offLineFlag) {
+				if (!clothesSize) {
+					uni.showToast({
+						icon: 'none',
+						title: '请选择衣服尺码!'
+					})
+					return;
+				}
+					
+				// 	if (!inviteCode) {
+				// 		uni.showToast({
+				// 			icon: 'none',
+				// 			title: '请输入邀请码!'
+				// 		})
+				// 		return;
+				// 	}
+				// }
 				// 15位身份证号码：第7、8位为出生年份(两位数)，第9、10位为出生月份，第11、12位代表出生日期，第15位代表性别，奇数为男，偶数为女。
 				// 18位身份证号码：第7、8、9、10位为出生年份(四位数)，第11、第12位为出生月份，第13、14位代表出生日期，第17位代表性别，奇数为男，偶数为女。
 				let lastNum = '';

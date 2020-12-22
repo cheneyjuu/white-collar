@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   jyfParser: function() {
-    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 324))
+    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 330))
   }
 }
 var render = function() {
@@ -231,106 +231,106 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant.js */ 8));function _getRequireWildcardCache() {if (typeof WeakMap !== "function") return null;var cache = new WeakMap();_getRequireWildcardCache = function _getRequireWildcardCache() {return cache;};return cache;}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;}if (obj === null || typeof obj !== "object" && typeof obj !== "function") {return { default: obj };}var cache = _getRequireWildcardCache();if (cache && cache.has(obj)) {return cache.get(obj);}var newObj = {};var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) {var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;if (desc && (desc.get || desc.set)) {Object.defineProperty(newObj, key, desc);} else {newObj[key] = obj[key];}}}newObj.default = obj;if (cache) {cache.set(obj, newObj);}return newObj;}function _createForOfIteratorHelper(o) {if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) {var i = 0;var F = function F() {};return { s: F, n: function n() {if (i >= o.length) return { done: true };return { done: false, value: o[i++] };}, e: function e(_e) {throw _e;}, f: F };}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var it,normalCompletion = true,didErr = false,err;return { s: function s() {it = o[Symbol.iterator]();}, n: function n() {var step = it.next();normalCompletion = step.done;return step;}, e: function e(_e2) {didErr = true;err = _e2;}, f: function f() {try {if (!normalCompletion && it.return != null) it.return();} finally {if (didErr) throw err;}} };}function _unsupportedIterableToArray(o, minLen) {if (!o) return;if (typeof o === "string") return _arrayLikeToArray(o, minLen);var n = Object.prototype.toString.call(o).slice(8, -1);if (n === "Object" && o.constructor) n = o.constructor.name;if (n === "Map" || n === "Set") return Array.from(n);if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);}function _arrayLikeToArray(arr, len) {if (len == null || len > arr.length) len = arr.length;for (var i = 0, arr2 = new Array(len); i < len; i++) {arr2[i] = arr[i];}return arr2;}var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 324));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
-
-{
-  components: {
-    jyfParser: jyfParser },
-
-  data: function data() {
-    return {
-      raceId: '',
-      raceInfo: {},
-      itemList: {},
-      modalName: null,
-      modalName2: null,
-      itemInfo: {},
-      itemId: '',
-      entryStartDate: null,
-      entryEndDate: null,
-      matchStartDate: null,
-      matchEndDate: null,
-      status: null,
-      globalRegisterFlag: false,
-      peopleCount: 0 };
-
-  },
-  methods: {
-    hideModal2: function hideModal2(e) {
-      this.modalName2 = null;
-    },
-    wxGetUserInfo: function wxGetUserInfo() {
-      var that = this;
-      uni.getUserInfo({
-        provider: 'weixin',
-        success: function success(infoRes) {
-          console.log({
-            userinfo: infoRes });
-
-          that.loginInfo = infoRes;
-          that.nickName = infoRes.userInfo.nickName;
-          that.avatarUrl = infoRes.userInfo.avatarUrl;
-          try {
-            uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
-            that.login();
-          } catch (e) {}
-        },
-        fail: function fail(res) {} });
-
-    },
-    login: function login() {
-      uni.removeStorageSync('sessionId');
-      var that = this;
-      var isCanUse = uni.getStorageSync('isCanUse');
-      if (isCanUse === false) {
-        uni.showLoading({
-          title: '登录中...' });
-
-        uni.login({
-          provider: 'weixin',
-          success: function success(loginRes) {
-            if (!that.isCanUse) {
-              //非第一次授权获取用户信息
-              uni.getUserInfo({
-                provider: 'weixin',
-                success: function success(infoRes) {
-                  console.log({
-                    getUserInfo: infoRes });
-
-                  that.loginInfo = infoRes;
-                } });
-
-            }
-            that.exchangeInfo(loginRes.code);
-          },
-          fail: function fail() {},
-          complete: function complete() {} });
-
-      }
-    },
-    exchangeInfo: function exchangeInfo(code) {var _this = this;
-      var that = this;
-      uni.request({
-        url: "".concat(constants.baseUrl, "/global/login/app"),
-        method: 'GET',
-        header: {
-          'content-type': 'application/json' },
-
-        data: {
-          code: code,
-          encryptedData: this.loginInfo.encryptedData,
-          iv: this.loginInfo.iv },
-
-        success: function success(res) {
-          var data = res.data;
-          // retry
-          if (res.statusCode === 500) {
-            _this.wxGetUserInfo();
-            return;
-          }
-          console.dir(data);
-          that.updateAccount(data);
-        },
+var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant.js */ 8));function _getRequireWildcardCache() {if (typeof WeakMap !== "function") return null;var cache = new WeakMap();_getRequireWildcardCache = function _getRequireWildcardCache() {return cache;};return cache;}function _interopRequireWildcard(obj) {if (obj && obj.__esModule) {return obj;}if (obj === null || typeof obj !== "object" && typeof obj !== "function") {return { default: obj };}var cache = _getRequireWildcardCache();if (cache && cache.has(obj)) {return cache.get(obj);}var newObj = {};var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;for (var key in obj) {if (Object.prototype.hasOwnProperty.call(obj, key)) {var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;if (desc && (desc.get || desc.set)) {Object.defineProperty(newObj, key, desc);} else {newObj[key] = obj[key];}}}newObj.default = obj;if (cache) {cache.set(obj, newObj);}return newObj;} //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 330));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { jyfParser: jyfParser }, data: function data() {return { raceId: '', raceInfo: {}, itemList: {}, modalName: null, modalName2: null, itemInfo: {}, itemId: '', entryStartDate: null, entryEndDate: null, matchStartDate: null, matchEndDate: null, status: null, globalRegisterFlag: false, peopleCount: 0 };}, methods: { hideModal2: function hideModal2(e) {this.modalName2 = null;}, wxGetUserInfo: function wxGetUserInfo() {var that = this;uni.getUserInfo({ provider: 'weixin', success: function success(infoRes) {console.log({ userinfo: infoRes });that.loginInfo = infoRes;that.nickName = infoRes.userInfo.nickName;that.avatarUrl = infoRes.userInfo.avatarUrl;try {uni.setStorageSync('isCanUse', false); //记录是否第一次授权  false:表示不是第一次授权
+            that.login();} catch (e) {}}, fail: function fail(res) {} });}, login: function login() {uni.removeStorageSync('sessionId');var that = this;var isCanUse = uni.getStorageSync('isCanUse');if (isCanUse === false) {uni.showLoading({ title: '登录中...' });uni.login({ provider: 'weixin', success: function success(loginRes) {if (!that.isCanUse) {//非第一次授权获取用户信息
+              uni.getUserInfo({ provider: 'weixin', success: function success(infoRes) {console.log({ getUserInfo: infoRes });that.loginInfo = infoRes;} });}that.exchangeInfo(loginRes.code);}, fail: function fail() {}, complete: function complete() {} });}}, exchangeInfo: function exchangeInfo(code) {var _this = this;var that = this;uni.request({ url: "".concat(constants.baseUrl, "/global/login/app"), method: 'GET', header: { 'content-type': 'application/json' }, data: { code: code, encryptedData: this.loginInfo.encryptedData, iv: this.loginInfo.iv }, success: function success(res) {var data = res.data; // retry
+          if (res.statusCode === 500) {_this.wxGetUserInfo();return;}console.dir(data);that.updateAccount(data);},
         fail: function fail() {},
         complete: function complete() {} });
 
@@ -434,60 +434,60 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
 
           console.log('load item data');
           _this3.itemList = data;
-          _this3.itemList.forEach(function (item) {
-            console.log('item info');
-            console.log(item);
-            item.isRegistered = false;
-            item.playerInfoList.forEach(function (user) {
-              if (user.login === userInfo.openId) {
-                item.isRegistered = true;
-                that.globalRegisterFlag = true;
-                // item.complete = user.completeFlag;
-                return;
-              }
-            });
+          that.peopleCount = _this3.itemList[0].userCount;
+          // this.itemList.forEach(item => {
+          // 	console.log('item info');
+          // 	console.log(item);
+          // 	item.isRegistered = false;
+          // 	item.playerInfoList.forEach(user => {
+          // 		if (user.login === userInfo.openId) {
+          // 			item.isRegistered = true;
+          // 			that.globalRegisterFlag = true;
+          // 			// item.complete = user.completeFlag;
+          // 			return;
+          // 		}
+          // 	});
 
-            var entryStart = new Date(that.entryStartDate).getTime();
-            var entryEnd = new Date(that.entryEndDate).getTime();
-            var matchStart = new Date(that.matchStartDate).getTime();
-            var matchEnd = new Date(that.matchEndDate).getTime();
-            console.log(todayStr, that.entryStartDate, that.entryEndDate, todayStr >= that.entryStartDate, todayStr <= that.entryEndDate);
-            // 报名中
-            // if (todayStr >= that.entryStartDate && todayStr <= that.entryEndDate) {
-            // 	that.raceInfo.status = 0;
-            // } else if (todayStr > that.entryEndDate && todayStr <= that.matchEndDate) {
-            // 	that.raceInfo.status = 1;
-            // } else if (todayStr > that.matchEndDate) {
-            // 	that.raceInfo.status = 2;
-            // }
-          });
-          console.log(data);var _iterator = _createForOfIteratorHelper(
+          // 	const entryStart = new Date(that.entryStartDate).getTime();
+          // 	const entryEnd = new Date(that.entryEndDate).getTime();
+          // 	const matchStart = new Date(that.matchStartDate).getTime();
+          // 	const matchEnd = new Date(that.matchEndDate).getTime();
+          // 	console.log(todayStr, that.entryStartDate, that.entryEndDate, todayStr >=that.entryStartDate, todayStr <= that.entryEndDate );
+          // });
+          // console.log(data);
 
-          _this3.itemList),_step;try {for (_iterator.s(); !(_step = _iterator.n()).done;) {var item = _step.value;
-              if (item.playerInfoList && item.playerInfoList.length > 0) {
-                that.peopleCount += item.playerInfoList.length;
-              }
-            }} catch (err) {_iterator.e(err);} finally {_iterator.f();}
+          // for (let item of this.itemList) {
+          // 	if (item.playerInfoList && item.playerInfoList.length > 0) {
+          // 		that.peopleCount += item.playerInfoList.length;
+          // 	}
+          // }
 
-          console.log(_this3.itemList);
+          // console.log(this.itemList);
         },
         fail: function fail() {},
         complete: function complete() {} });
 
     },
-    toRegister: function toRegister(item) {var
+    toRegister: function toRegister(item) {
+      var token = uni.getStorageSync('id_token');
+      if (!token) {
+        this.modalName2 = 'DialogModal2';
+        return;
+      }var
       itemId = item.itemId;var _this$raceInfo =
       this.raceInfo,raceId = _this$raceInfo.raceId,offLineFlag = _this$raceInfo.offLineFlag;
       this.itemId = itemId;
       var userInfo = uni.getStorageSync('userInfo');
       var isJoined = false;
       if (userInfo) {
-        item.playerInfoList.forEach(function (user) {
-          if (user.login === userInfo.openId) {
-            console.log(user);
-            isJoined = true;
-          }
-        });
+        if (item.playerInfoList) {
+          item.playerInfoList.forEach(function (user) {
+            if (user.login === userInfo.openId) {
+              console.log(user);
+              isJoined = true;
+            }
+          });
+        }
       }
       if (isJoined) {
         uni.showToast({
@@ -517,17 +517,17 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
           } else {var
             itemId = item.itemId;
             var userInfo = uni.getStorageSync('userInfo');
-            var isJoined = false;
-            if (userInfo) {
-              var playerInfoList = item.playerInfoList;
-              playerInfoList.forEach(function (user) {
-                if (user.login === userInfo.openId) {
-                  console.log(user);
-                  isJoined = true;
-                }
-              });
-            }var _that$raceInfo =
-
+            // let isJoined = false;
+            // if (userInfo) {
+            // 	const playerInfoList = item.playerInfoList;
+            // 	playerInfoList.forEach(function(user) {
+            // 		if (user.login === userInfo.openId) {
+            // 			console.log(user);
+            // 			isJoined = true;
+            // 		}
+            // 	});
+            // }
+            var _that$raceInfo =
             that.raceInfo,lng = _that$raceInfo.lng,lat = _that$raceInfo.lat,raceId = _that$raceInfo.raceId;
             that.modalName = null;
             var checkInType = that.raceInfo.checkInType ? that.raceInfo.checkInType : 'IN_ORDER';

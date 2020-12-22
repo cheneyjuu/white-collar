@@ -355,7 +355,7 @@ var _default = { data: function data() {return { raceId: '', itemId: '', lng: 0,
                 var distance = that.getDistance(latitude, longitude, lat, lng);
                 var checkinedIndex = that.currentIndex;
                 console.log(distance, checkinedIndex, that.checkinIndexList.findIndex(function (value) {return value === checkinedIndex;}) === -1);
-                if (distance <= 150 && that.checkinIndexList.findIndex(function (value) {return value === checkinedIndex;}) === -1) {
+                if (distance <= 120 && that.checkinIndexList.findIndex(function (value) {return value === checkinedIndex;}) === -1) {
                   that.enableScroll = false;
                   that.showDialog = true;
                   that.lng = lng;

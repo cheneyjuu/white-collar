@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   jyfParser: function() {
-    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 324))
+    return Promise.all(/*! import() | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then(__webpack_require__.bind(null, /*! @/components/jyf-parser/jyf-parser.vue */ 330))
   }
 }
 var render = function() {
@@ -153,7 +153,7 @@ var constants = _interopRequireWildcard(__webpack_require__(/*! @/utils/constant
 //
 //
 //
-var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 324));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { jyfParser: jyfParser }, data: function data() {return { data: [], routeInfo: {} };
+var jyfParser = function jyfParser() {Promise.all(/*! require.ensure | components/jyf-parser/jyf-parser */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/jyf-parser/jyf-parser")]).then((function () {return resolve(__webpack_require__(/*! @/components/jyf-parser/jyf-parser */ 330));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default = { components: { jyfParser: jyfParser }, data: function data() {return { data: [], routeInfo: {} };
 
   },
   methods: {

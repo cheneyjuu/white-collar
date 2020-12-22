@@ -38,7 +38,8 @@
     "pages/policy/index",
     "pages/mine/my-favor",
     "pages/question/index",
-    "pages/race/bindInfo/bindInfo"
+    "pages/race/bindInfo/bindInfo",
+    "pages/square/test-web-view/test-web-view"
   ],
   "subPackages": [],
   "window": {
@@ -92,5 +93,6 @@
     "mescroll-body": "/components/mescroll-uni/mescroll-body",
     "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
     "cu-custom": "/colorui/components/cu-custom"
-  }
+  },
+  "sitemapLocation": "sitemap70.json"
 }

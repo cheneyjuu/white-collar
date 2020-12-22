@@ -124,7 +124,7 @@ export default {
 			complete: false,
 			raceInfo: uni.getStorageSync('raceInfo') ? uni.getStorageSync('raceInfo') : {itemId:null, index: 0, complete: false},
 			userCheckedIndexList: [], // 用户打卡后，将对应的数组下标存储到此数组
-			isDebug: true
+			isDebug: false
 		};
 	},
 	methods: {
@@ -137,17 +137,10 @@ export default {
 		controltap(e) {
 			// console.log(e.detail.controlId);
 		},
-		loadRouteData(itemId) {
-			// 1. 用户进入地图，获取当前项目的路线信息
-			// 2. 同时获取用户的打卡历史数据（能进入这个页面，说明用户还未完成比赛）
-			// 3. 将用户已经打过卡的路线标记为 true
-			// 4. 定时获取用户当前位置，并循环判断与未打卡点的距离，如果当前位置<=未打卡点，则自动打卡
-			// 5. 根据自动打卡返回的状态码判断是否打卡成功，如果没有成功，则把未成功的点放入补偿列表，然后循环打卡
-			// 6. 每次打完卡，判断一下是不是所有的标记都是 true，如果是，则将全局标记变量改为 true
+		reloadData: function() {
 			const that = this;
 			const token = uni.getStorageSync('id_token');
-			const userInfo = uni.getStorageSync('userInfo');
-			const currentItem = uni.getStorageSync('raceInfo');
+			const itemId = that.itemId;
 			
 			uni.request({
 				url: `${constants.baseUrl}/races/items/${itemId}/routes`,
@@ -159,6 +152,61 @@ export default {
 				success: res => {
 					const { data } = res.data;
 					that.data = data;
+					that.pointTitles = [];let isAllChecked = true;
+					that.data.forEach(item => {
+						that.pointTitles.push({
+							title: item.title,
+							checked: item.checkedFlag
+						});
+						if (item.checkedFlag === false) {
+							isAllChecked = false;
+						}
+					});
+					
+					if (isAllChecked) {
+						that.modalName = 'DialogModal1';
+						// that.complete = true;
+						that.showDialog = false;
+						// that.enableScroll = true;
+						
+						// that.raceInfo.itemId = that.itemId;
+						// that.raceInfo.complete = true;
+						// that.raceInfo.index = 0;
+						// uni.setStorageSync('raceInfo', that.raceInfo);
+						clearInterval(that.myInterval);
+						clearInterval(that.timer);
+						clearInterval(that.drawInterval);
+						return;
+					}
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		loadRouteData(itemId) {
+			// 1. 用户进入地图，获取当前项目的路线信息
+			// 2. 同时获取用户的打卡历史数据（能进入这个页面，说明用户还未完成比赛）
+			// 3. 将用户已经打过卡的路线标记为 true
+			// 4. 定时获取用户当前位置，并循环判断与未打卡点的距离，如果当前位置<=未打卡点，则自动打卡
+			// 5. 根据自动打卡返回的状态码判断是否打卡成功，如果没有成功，则把未成功的点放入补偿列表，然后循环打卡
+			// 6. 每次打完卡，判断一下是不是所有的标记都是 true，如果是，则将全局标记变量改为 true
+			const that = this;
+			const token = uni.getStorageSync('id_token');
+			that.itemId = itemId;
+			
+			uni.request({
+				url: `${constants.baseUrl}/races/items/${itemId}/routes`,
+				method: 'GET',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + token
+				},
+				success: res => {
+					const { data } = res.data;
+					that.data = data;
+					console.group('路线数据');
+					console.log(data);
+					that.countTime();
 					
 					that.data.forEach((item, index) => {
 						that.pointTitles.push({
@@ -176,210 +224,83 @@ export default {
 						};
 						that.markers.push(mark);
 					});
-					
-					
-					// if (that.raceInfo.itemId === that.itemId) {
-					// 	// 检查userCheckedIndexList，排除已签到的点
-					// 	if (that.userCheckedIndexList) {
-					// 		that.userCheckedIndexList.forEach(item => {
-					// 			that.pointTitles[item].checked = true;
-					// 		});
-					// 	}
-					// }
-					
-					that.myInterval = setInterval(() => {
-						wx.getLocation({
-							type: 'gcj02',
-							success(res) {
-								let latitude= res.latitude;
-								let longitude = res.longitude;
-								// 持续获取当前位置信息，在 routes 中对比距离，如果距离小于等于150m，则弹出签到卡片，签到成功后，将此 route 数据标记为已签到,并添加到 userCheckedIndexList
-								that.data.forEach((item, index) => {
-		
-									if (!item.checkedFlag) {
-										const latData = item.lat;
-										const lngData = item.lng;
-										const distance = that.getDistance(latitude, longitude, latData, lngData);
-										if (distance <= 120) {
-											that.currentPoint = item;
-											console.log('currentIndex', index);
-											// 获取当前要签到的点的下标
-											that.currentIndex = index;
-											that.showDialog = true;
-											// 将用户已签到的点存储起来
-											const isExist = that.userCheckedIndexList.findIndex(element => element === index);
-											if (isExist === -1) {
-												that.userCheckedIndexList.push(index);
-												console.log('用户已签到数据');
-												console.log(that.userCheckedIndexList);
-											}
-										}	
-									}
-								});
-							}
-						});
-					}, 2000);
-					
-					// 自动打卡
-					console.log('自动打卡', that.userCheckedIndexList);
-					that.checkInterval = setInterval(() => {
-						that.userCheckedIndexList.forEach(index => {
-							const item = that.data[index];
-							console.log(currentItem.itemId, item.itemId.id);
-							if ((currentItem.itemId === item.itemId.id) || !currentItem) {
-								if (!item.isChecked) {
-									wx.getLocation({
-										type: 'gcj02',
-										success: function(res) {
-											let latitude = res.latitude;
-											let longitude = res.longitude;
-											if (that.isDebug) {
-												latitude = 31.493489;
-												longitude = 120.487983;
-											}
-											const payload = {
-												itemId: { id: that.itemId },
-												title: item.title,
-												checkInPoint: latitude + ',' + longitude,
-												spendTime: that.nums
-											};
-											uni.request({
-												url: `${constants.baseUrl}/races/items/routes/checkin`,
-												method: 'POST',
-												header: {
-													'content-type': 'application/json',
-													Authorization: 'Bearer ' + token
-												},
-												data: payload,
-												success: res => {
-													const { data } = res.data;
-													item.isChecked = true;
-													that.userCheckedIndexList.forEach(value => {
-														that.pointTitles[value].checked = true;
-													});
-													uni.setStorageSync('userCheckedIndexList', that.userCheckedIndexList);
-												},
-												fail: () => {},
-												complete: () => {}
-											});
-											if (that.userCheckedIndexList.length === that.data.length) {
-												that.modalName = 'DialogModal1';
-												that.complete = true;
-												that.showDialog = false;
-												that.enableScroll = true;
-												
-												that.raceInfo.itemId = that.itemId;
-												that.raceInfo.complete = true;
-												that.raceInfo.index = 0;
-												uni.setStorageSync('raceInfo', that.raceInfo);
-												clearInterval(that.myInterval);
-												clearInterval(that.timer);
-												clearInterval(that.drawInterval);
-												clearInterval(that.checkInterval);
-												return;
-											}
-											
-											that.raceInfo.index = parseInt(that.raceInfo.index, 10) + 1;
-											uni.setStorageSync('raceInfo', that.raceInfo);
-											
-											that.showDialog = false;
-											that.enableScroll = true;
-										}
-									})
-								}
-							}
-						})
-					}, 5000);
 				},
 				fail: () => {},
 				complete: () => {}
 			});
 		},
-		autoCheckIn: function(item, lat, lng) {},
-		checkin() {
+		getLocation: function() {
 			const that = this;
-			const token = uni.getStorageSync('id_token');
-			const userInfo = uni.getStorageSync('userInfo');
-			const itemId = that.itemId;
-			that.countTime();
-			
-			that.drawInterval = setInterval(() => {
-				wx.getLocation({
-					type: 'gcj02',
-					success: function(res) {
-						const latitude = res.latitude;
-						const longitude = res.longitude;
-											
-						// 计算距离
-						let newCover = {
-							latitude,
-							longitude
-						};
-						that.drawline(newCover);
-					}
-				})
-			}, 1000);
-			
-			// 要签到的点的数据
-			const checkInData = that.data[that.currentIndex];
-			const checkInPoint = checkInData.latitude + ',' + checkInData.longitude;
-			console.log('checkInPoint', checkInPoint);
-			
-			const payload = {
-				itemId: { id: itemId },
-				title: checkInData.title,
-				checkInPoint,
-				spendTime: that.nums
-			};
-			wx.getLocation({
-				type: 'gcj02',
-				success: function(res) {
-					payload.checkInPoint = res.latitude + ',' + res.longitude;
-					uni.request({
-						url: `${constants.baseUrl}/races/items/routes/checkin`,
-						method: 'POST',
-						header: {
-							'content-type': 'application/json',
-							Authorization: 'Bearer ' + token
-						},
-						data: payload,
-						success: res => {
-							const { data } = res.data;
-							checkInData.isChecked = true;
-							that.userCheckedIndexList.forEach(item => {
-								that.pointTitles[item].checked = true;
+			that.myInterval = setInterval(() => {
+				if (that.data) {
+					wx.getLocation({
+						type: 'gcj02',
+						success(res) {
+							let latitude= res.latitude;
+							let longitude = res.longitude;
+							if (that.isDebug) {
+								longitude = 120.488069;
+								latitude = 31.493672;
+							}
+							const point = {
+								longitude,
+								latitude
+							};
+							that.drawline(point);
+							// 持续获取当前位置信息，在 routes 中对比距离，如果距离小于等于150m，则弹出签到卡片，签到成功后，将此 route 数据标记为已签到,并添加到 userCheckedIndexList
+							that.data.forEach((item, index) => {
+								if (!item.checkedFlag) {
+									const latData = item.lat;
+									const lngData = item.lng;
+									const distance = that.getDistance(latitude, longitude, latData, lngData);
+									if (distance <= 120) {
+										that.currentPoint = item;
+										// 获取当前要签到的点的下标
+										that.currentIndex = index;
+										console.log('currentIndex', index);
+										that.showDialog = true;
+										that.autoCheckIn(item, latitude, longitude);
+										// 将用户已签到的点存储起来
+										// const isExist = that.userCheckedIndexList.findIndex(element => element === index);
+										// if (isExist === -1) {
+										// 	that.userCheckedIndexList.push(index);
+										// 	console.log('用户已签到数据');
+										// 	console.log(that.userCheckedIndexList);
+										// }
+									}	
+								}
 							});
-							uni.setStorageSync('userCheckedIndexList', that.userCheckedIndexList);
-						},
-						fail: () => {},
-						complete: () => {}
+						}
 					});
 				}
-			});
-			
-		
-			
-			if (that.userCheckedIndexList.length === that.data.length) {
-				that.modalName = 'DialogModal1';
-				that.complete = true;
-				that.showDialog = false;
-				that.enableScroll = true;
-				
-				that.raceInfo.itemId = that.itemId;
-				that.raceInfo.complete = true;
-				that.raceInfo.index = 0;
-				uni.setStorageSync('raceInfo', that.raceInfo);
-				clearInterval(that.myInterval);
-				clearInterval(that.timer);
-				return;
-			}
-			
-			that.raceInfo.index = parseInt(that.raceInfo.index, 10) + 1;
-			uni.setStorageSync('raceInfo', that.raceInfo);
-			
-			that.showDialog = false;
-			that.enableScroll = true;
+			}, 2000);
 		},
+		autoCheckIn: function(item, lat, lng) {
+			const that = this;
+			const token = uni.getStorageSync('id_token');
+			const payload = {
+				itemId: item.itemId,
+				title: item.title,
+				checkInPoint: lat + ',' + lng,
+				spendTime: that.nums
+			};
+			uni.request({
+				url: `${constants.baseUrl}/races/items/routes/checkin`,
+				method: 'POST',
+				header: {
+					'content-type': 'application/json',
+					Authorization: 'Bearer ' + token
+				},
+				data: payload,
+				success: res => {
+					const { data } = res.data;
+					that.reloadData();
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+		},
+		
 		hideModal(e) {
 			this.modalName = null;
 		},
@@ -427,114 +348,32 @@ export default {
 				that.nums = hour + ':' + minute + ':' + second;
 			}, 50);
 		},
-		startRace() {
-			const that = this;
-			this.polyline[0].points = [];
-			that.raceInterval = setInterval(function() {
-				wx.getLocation({
-					type: 'gcj02',
-					success(res) {
-						console.log(res);
-						const latitude = res.latitude;
-						const longitude = res.longitude;
-					
-						// 计算距离
-						let newCover = {
-							latitude,
-							longitude
-						};
-						let oriCovers = that.covers;
-						let len = oriCovers.length;
-						let lastCover;
-						if (len == 0) {
-							oriCovers.push(newCover);
-						}
-						len = oriCovers.length;
-						lastCover = oriCovers[len - 1];
-
-						let newMeters = that.getDistance(lastCover.latitude, lastCover.longitude, res.latitude, res.longitude) / 1000;
-						if (newMeters < 0.0015) {
-							newMeters = 0.0;
-						}
-						
-						oriCovers.push(newCover);
-						that.drawline(newCover);
-					}
-				});
-				console.log(that.polyline[0]);
-			}, 2000);
-			that.isStart = true;
-			that.countTime();
-			// that.mapUpdate();
-		},
 		drawline(point) {
 			this.polyline[0].points.push(point);
-		},
-		endRace() {
-			const token = uni.getStorageSync('id_token');
-			clearInterval(this.raceInterval);
-			clearInterval(this.timer);
-			this.isStart = false;
-			const payload = {
-				points: this.polyline[0].points,
-				raceId: { id: this.raceId },
-				itemId: { id: this.itemId },
-				spendTime: this.nums,
-				score: this.meters
-			};
-			uni.request({
-				url: `${constants.baseUrl}/races/items/scores`,
-				method: 'PUT',
-				data: payload,
-				header: {
-					'content-type': 'application/json',
-					Authorization: 'Bearer ' + token
-				},
-				success: res => {
-					const { data } = res.data;
-					console.log(data);
-				},
-				fail: () => {},
-				complete: () => {}
-			});
-		},
-		mapUpdate() {
-			wx.startLocationUpdate({
-				success(res) {
-					uni.showToast({
-						icon: 'none',
-						title: JSON.stringify(res)
-					});
-				},
-				complete(res) {
-					console.log('获取位置');
-					console.log(res);
-				}
-			});
 		}
 	},
 	onLoad(param) {
 		this.raceId = param.raceId;
 		this.itemId = param.itemId;
-		const raceInfo = uni.getStorageSync('raceInfo');
-		console.log('race info');
-		console.log(raceInfo);
-		if (!raceInfo) {
-			this.raceInfo.itemId = param.itemId;
-		}
+		// const raceInfo = uni.getStorageSync('raceInfo');
+		// console.log('race info');
+		// console.log(raceInfo);
+		// if (!raceInfo) {
+		// 	this.raceInfo.itemId = param.itemId;
+		// }
 		
 		const that = this;
 		
-		const userCheckedIndexList = uni.getStorageSync('userCheckedIndexList');
-		if (userCheckedIndexList) {
-			that.userCheckedIndexList = userCheckedIndexList;
-		}
+		// const userCheckedIndexList = uni.getStorageSync('userCheckedIndexList');
+		// if (userCheckedIndexList) {
+		// 	that.userCheckedIndexList = userCheckedIndexList;
+		// }
 		
-		wx.startLocationUpdateBackground({
-			success(res) {
-				console.log(res);
-			}
-		});
+		// wx.startLocationUpdateBackground({
+		// 	success(res) {
+		// 		console.log(res);
+		// 	}
+		// });
 
 		if (that.isDebug) {
 			this.lng = 120.488069;
@@ -551,12 +390,12 @@ export default {
 			});
 		}
 		this.loadRouteData(this.itemId);
+		this.getLocation();
 	},
 	onUnload() {
 		clearInterval(this.myInterval);
 		clearInterval(this.timer);
 		clearInterval(this.drawInterval);
-		clearInterval(this.checkInterval);
 	}
 };
 </script>

@@ -24,8 +24,8 @@
 					</button>
 					<!-- <view class="bg-gradual-red submit" @click="activityRegister(activity.activityId)" v-if="activity.outOfDateFlag === false">立即报名</view>
 					<view class="bg-gray submit" v-if="activity.outOfDateFlag === true">已过期</view> -->
-					<view class="bg-gradual-red submit" @click="toRegister()" v-if="(activity.registerFlag === false && !activity.outOfDateFlag) || activity.activityId.id === '395550105019392'">立即报名</view>
-					<view class="bg-gradual-blue submit" v-if="activity.registerFlag === true && !activity.outOfDateFlag && activity.activityId.id !== '395550105019392'">已报名</view>
+					<view class="bg-gradual-red submit" @click="toRegister()" v-if="(activity.registerFlag === false && !activity.outOfDateFlag) || activity.activityId.id === '395550105019392' || activity.activityId.id === '399648627894912'">立即报名</view>
+					<view class="bg-gradual-blue submit" v-if="activity.registerFlag === true && !activity.outOfDateFlag && activity.activityId.id !== '395550105019392' && activity.activityId.id !== '399648627894912'">已报名</view>
 					<view class="bg-gray submit" v-if="activity.outOfDateFlag === true">已过期</view>
 				</view>
 			</view>
@@ -133,12 +133,12 @@ export default {
 				});
 				return;
 			}
-			if (that.activity.activityId && that.activity.activityId.id === '395550105019392') {
+			if (that.activity.thirdAppFlag === true) {
 				this.recordPresonInfo();
 				wx.navigateToMiniProgram({
-				  appId: 'wxc364791141684366',
-				  path: '/pages/match/detail/index?matchid=7665',
-				  extraData: {},
+				  appId: that.activity.appId,
+				  path: that.activity.pagePath,
+				  extraData: that.activity.extraData === null ? {} : JSON.parse(that.activity.extraData),
 				  envVersion: 'release',
 				  success(res) {
 					console.log('跳转成功');
@@ -150,6 +150,35 @@ export default {
 					url: '/pages/activity/signup?activityId=' + that.activity.activityId.id,
 				})
 			}
+			// if (that.activity.activityId && that.activity.activityId.id === '395550105019392') {
+			// 	this.recordPresonInfo();
+			// 	wx.navigateToMiniProgram({
+			// 	  appId: 'wxc364791141684366',
+			// 	  path: '/pages/match/detail/index?matchid=7665',
+			// 	  extraData: {},
+			// 	  envVersion: 'release',
+			// 	  success(res) {
+			// 		console.log('跳转成功');
+			// 		console.log(res);
+			// 	  }
+			// 	})
+			// } else if (that.activity.activityId && that.activity.activityId.id === '399648627894912') {
+			// 	this.recordPresonInfo();
+			// 	wx.navigateToMiniProgram({
+			// 	  appId: 'wxc364791141684366',
+			// 	  path: '/pages/match/detail/index?matchid=7740',
+			// 	  extraData: {},
+			// 	  envVersion: 'release',
+			// 	  success(res) {
+			// 		console.log('跳转成功');
+			// 		console.log(res);
+			// 	  }
+			// 	})
+			// } else {
+			// 	uni.navigateTo({
+			// 		url: '/pages/activity/signup?activityId=' + that.activity.activityId.id,
+			// 	})
+			// }
 		},
 		recordPresonInfo() {
 			const token = uni.getStorageSync('id_token');

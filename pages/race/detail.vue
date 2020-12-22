@@ -26,7 +26,7 @@
 					<view class="">
 						<text class="cuIcon-titles text-red"></text>赛事项目
 					</view>
-					<view v-if="raceInfo.offLineFlag" class="text-gray">选择一条线路报名</view>
+					<view v-if="raceInfo.offLineFlag" class="text-gray">请选择报名组别</view>
 				</view>
 				<view class="item" v-for="(item, index) in itemList" :key="index">
 					<view>
@@ -40,7 +40,7 @@
 						<view class="" v-if="!raceInfo.offLineFlag">
 							<button class="cu-btn round bg-orange sm margin-right-sm" @click="toViewRanking(item)" v-if="raceInfo.status >= 1 && item.registerFlag">查看排行</button>
 							<button class="cu-btn round bg-red" @click="toRegister(item)" v-if="!item.registerFlag && raceInfo.status === 0">立即报名</button>
-							<button class="cu-btn round bg-blue" v-if="item.isRegistered === true && raceInfo.status === 0">尚未开始</button>
+							<button class="cu-btn round bg-blue" v-if="item.registerFlag === true && raceInfo.status === 0">尚未开始</button>
 							<button class="cu-btn round bg-blue" @click="startRace(item)" v-if="item.registerFlag === true && raceInfo.status === 1 && item.completeFlag === false">开始比赛</button>
 							<button class="cu-btn round bg-gray" v-if="item.completeFlag === true">比赛完成</button>
 						</view>
@@ -298,60 +298,60 @@ export default {
 					
 					console.log('load item data');
 					this.itemList = data;
-					this.itemList.forEach(item => {
-						console.log('item info');
-						console.log(item);
-						item.isRegistered = false;
-						item.playerInfoList.forEach(user => {
-							if (user.login === userInfo.openId) {
-								item.isRegistered = true;
-								that.globalRegisterFlag = true;
-								// item.complete = user.completeFlag;
-								return;
-							}
-						});
+					that.peopleCount = this.itemList[0].userCount;
+					// this.itemList.forEach(item => {
+					// 	console.log('item info');
+					// 	console.log(item);
+					// 	item.isRegistered = false;
+					// 	item.playerInfoList.forEach(user => {
+					// 		if (user.login === userInfo.openId) {
+					// 			item.isRegistered = true;
+					// 			that.globalRegisterFlag = true;
+					// 			// item.complete = user.completeFlag;
+					// 			return;
+					// 		}
+					// 	});
 						
-						const entryStart = new Date(that.entryStartDate).getTime();
-						const entryEnd = new Date(that.entryEndDate).getTime();
-						const matchStart = new Date(that.matchStartDate).getTime();
-						const matchEnd = new Date(that.matchEndDate).getTime();
-						console.log(todayStr, that.entryStartDate, that.entryEndDate, todayStr >=that.entryStartDate, todayStr <= that.entryEndDate );
-						// 报名中
-						// if (todayStr >= that.entryStartDate && todayStr <= that.entryEndDate) {
-						// 	that.raceInfo.status = 0;
-						// } else if (todayStr > that.entryEndDate && todayStr <= that.matchEndDate) {
-						// 	that.raceInfo.status = 1;
-						// } else if (todayStr > that.matchEndDate) {
-						// 	that.raceInfo.status = 2;
-						// }
-					});
-					console.log(data);
+					// 	const entryStart = new Date(that.entryStartDate).getTime();
+					// 	const entryEnd = new Date(that.entryEndDate).getTime();
+					// 	const matchStart = new Date(that.matchStartDate).getTime();
+					// 	const matchEnd = new Date(that.matchEndDate).getTime();
+					// 	console.log(todayStr, that.entryStartDate, that.entryEndDate, todayStr >=that.entryStartDate, todayStr <= that.entryEndDate );
+					// });
+					// console.log(data);
 		
-					for (let item of this.itemList) {
-						if (item.playerInfoList && item.playerInfoList.length > 0) {
-							that.peopleCount += item.playerInfoList.length;
-						}
-					}
+					// for (let item of this.itemList) {
+					// 	if (item.playerInfoList && item.playerInfoList.length > 0) {
+					// 		that.peopleCount += item.playerInfoList.length;
+					// 	}
+					// }
 					
-					console.log(this.itemList);
+					// console.log(this.itemList);
 				},
 				fail: () => {},
 				complete: () => {}
 			});
 		},
 		toRegister(item) {
+			const token = uni.getStorageSync('id_token');
+			if (!token) {
+				this.modalName2 = 'DialogModal2';
+				return;
+			}
 			const {itemId} = item;
 			const {raceId, offLineFlag} = this.raceInfo;
 			this.itemId = itemId;
 			const userInfo = uni.getStorageSync('userInfo');
 			let isJoined = false;
-			if (userInfo) {				
-				item.playerInfoList.forEach(function(user) {
-					if (user.login === userInfo.openId) {
-						console.log(user);
-						isJoined = true;
-					}
-				});
+			if (userInfo) {
+				if (item.playerInfoList) {
+					item.playerInfoList.forEach(function(user) {
+						if (user.login === userInfo.openId) {
+							console.log(user);
+							isJoined = true;
+						}
+					});
+				}
 			}
 			if (isJoined) {
 				uni.showToast({
@@ -381,16 +381,16 @@ export default {
 					} else {
 						const {itemId} = item;
 						const userInfo = uni.getStorageSync('userInfo');
-						let isJoined = false;
-						if (userInfo) {
-							const playerInfoList = item.playerInfoList;
-							playerInfoList.forEach(function(user) {
-								if (user.login === userInfo.openId) {
-									console.log(user);
-									isJoined = true;
-								}
-							});
-						}
+						// let isJoined = false;
+						// if (userInfo) {
+						// 	const playerInfoList = item.playerInfoList;
+						// 	playerInfoList.forEach(function(user) {
+						// 		if (user.login === userInfo.openId) {
+						// 			console.log(user);
+						// 			isJoined = true;
+						// 		}
+						// 	});
+						// }
 						
 						const {lng, lat, raceId} = that.raceInfo;
 						that.modalName = null;

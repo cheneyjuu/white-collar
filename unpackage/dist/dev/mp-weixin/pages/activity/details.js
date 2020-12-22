@@ -263,12 +263,12 @@ var _default = { data: function data() {return { token: uni.getStorageSync('id_t
 
         return;
       }
-      if (that.activity.activityId && that.activity.activityId.id === '395550105019392') {
+      if (that.activity.thirdAppFlag === true) {
         this.recordPresonInfo();
         wx.navigateToMiniProgram({
-          appId: 'wxc364791141684366',
-          path: '/pages/match/detail/index?matchid=7665',
-          extraData: {},
+          appId: that.activity.appId,
+          path: that.activity.pagePath,
+          extraData: that.activity.extraData === null ? {} : JSON.parse(that.activity.extraData),
           envVersion: 'release',
           success: function success(res) {
             console.log('跳转成功');
@@ -280,6 +280,35 @@ var _default = { data: function data() {return { token: uni.getStorageSync('id_t
           url: '/pages/activity/signup?activityId=' + that.activity.activityId.id });
 
       }
+      // if (that.activity.activityId && that.activity.activityId.id === '395550105019392') {
+      // 	this.recordPresonInfo();
+      // 	wx.navigateToMiniProgram({
+      // 	  appId: 'wxc364791141684366',
+      // 	  path: '/pages/match/detail/index?matchid=7665',
+      // 	  extraData: {},
+      // 	  envVersion: 'release',
+      // 	  success(res) {
+      // 		console.log('跳转成功');
+      // 		console.log(res);
+      // 	  }
+      // 	})
+      // } else if (that.activity.activityId && that.activity.activityId.id === '399648627894912') {
+      // 	this.recordPresonInfo();
+      // 	wx.navigateToMiniProgram({
+      // 	  appId: 'wxc364791141684366',
+      // 	  path: '/pages/match/detail/index?matchid=7740',
+      // 	  extraData: {},
+      // 	  envVersion: 'release',
+      // 	  success(res) {
+      // 		console.log('跳转成功');
+      // 		console.log(res);
+      // 	  }
+      // 	})
+      // } else {
+      // 	uni.navigateTo({
+      // 		url: '/pages/activity/signup?activityId=' + that.activity.activityId.id,
+      // 	})
+      // }
     },
     recordPresonInfo: function recordPresonInfo() {
       var token = uni.getStorageSync('id_token');

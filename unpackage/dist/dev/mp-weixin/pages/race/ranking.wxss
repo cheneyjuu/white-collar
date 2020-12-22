@@ -72,19 +72,22 @@ page {
 #manRanking {
 	width: 100%;
 	height: 100%;
-	border-radius: 8rpx;
+	-webkit-border-radius: 8rpx;
+	        border-radius: 8rpx;
 	padding: 10rpx;
 	background: #54b2ff;
 }
 #womanRanking {
 	width: 100%;
 	height: 100%;
-	border-radius: 8rpx;
+	-webkit-border-radius: 8rpx;
+	        border-radius: 8rpx;
 	padding: 10rpx;
 	background: #fda7df;
 }
 #manRanking .content, #womanRanking .content {
-	border-radius: 8rpx;
+	-webkit-border-radius: 8rpx;
+	        border-radius: 8rpx;
 	background: #ffffff;
 	padding: 10rpx;
 }

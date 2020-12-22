@@ -125,6 +125,15 @@
             "path" : "pages/race/bindInfo/bindInfo",
             "style" : {}
         }
+        ,{
+            "path" : "pages/square/test-web-view/test-web-view",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom",
